@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadro de Manutenção - Versão HTML/JS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hidden { display: none !important; }
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .animate-pulse-red {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(214.3 31.8% 91.4%)",
+                        input: "hsl(214.3 31.8% 91.4%)",
+                        ring: "hsl(215 20.2% 65.1%)",
+                        background: "hsl(0 0% 100%)",
+                        foreground: "hsl(222.2 47.4% 11.2%)",
+                        primary: {
+                            DEFAULT: "hsl(222.2 47.4% 11.2%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(210 40% 96.1%)",
+                            foreground: "hsl(222.2 47.4% 11.2%)",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(0 100% 50%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(210 40% 96.1%)",
+                            foreground: "hsl(215.4 16.3% 46.9%)",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(210 40% 96.1%)",
+                            foreground: "hsl(222.2 47.4% 11.2%)",
+                        },
+                        warning: {
+                            DEFAULT: "hsl(38 92% 50%)",
+                            foreground: "hsl(48 96% 89%)",
+                        },
+                        success: {
+                            DEFAULT: "hsl(142 76% 36%)",
+                            foreground: "hsl(356 29% 95%)",
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-slate-900 min-h-screen">
+
+    <!-- LOGIN SCREEN -->
+    <div id="screen-login" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-white via-gray-100 to-white">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">Quadro de Manutenção</h1>
+                <p class="text-gray-500">Fundaluminio - Versão HTML Puro</p>
+            </div>
+
+            <div class="bg-white rounded-lg border shadow-lg overflow-hidden">
+                <!-- Tabs -->
+                <div class="grid grid-cols-2 border-b">
+                    <button onclick="switchTab('operador')" id="tab-operador" class="p-4 font-medium text-center bg-slate-900 text-white transition-colors">Operador</button>
+                    <button onclick="switchTab('encarregado')" id="tab-encarregado" class="p-4 font-medium text-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Encarregado</button>
+                </div>
+
+                <!-- Login Operador -->
+                <div id="form-operador" class="p-6 space-y-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="wrench" class="text-slate-900"></i>
+                        <h2 class="text-xl font-bold">Acesso Operador</h2>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Matrícula</label>
+                        <div class="relative">
+                            <i data-lucide="user" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="matricula" placeholder="Ex: 1, 2, 3..." class="w-full pl-10 p-3 border rounded-md focus:ring-2 focus:ring-slate-900 outline-none">
+                        </div>
+                    </div>
+
+                    <div id="error-operador" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-md flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                        <span>Matrícula não encontrada.</span>
+                    </div>
+
+                    <button onclick="loginOperador()" class="w-full bg-slate-900 text-white py-3 rounded-md font-bold hover:bg-slate-800 transition-colors">
+                        Acessar Sistema
+                    </button>
+                </div>
+
+                <!-- Login Encarregado -->
+                <div id="form-encarregado" class="hidden p-6 space-y-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="clipboard-list" class="text-slate-900"></i>
+                        <h2 class="text-xl font-bold">Acesso Encarregado</h2>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Usuário</label>
+                        <div class="relative">
+                            <i data-lucide="user" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="usuario" placeholder="roberto.almeida" class="w-full pl-10 p-3 border rounded-md focus:ring-2 focus:ring-slate-900 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Senha</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="password" id="senha" placeholder="••••••" class="w-full pl-10 p-3 border rounded-md focus:ring-2 focus:ring-slate-900 outline-none">
+                        </div>
+                    </div>
+
+                    <div id="error-encarregado" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-md flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                        <span>Credenciais inválidas.</span>
+                    </div>
+
+                    <button onclick="loginEncarregado()" class="w-full bg-slate-900 text-white py-3 rounded-md font-bold hover:bg-slate-800 transition-colors">
+                        Entrar no Painel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPERATOR SCREEN -->
+    <div id="screen-operador" class="hidden min-h-screen bg-gray-50">
+        <header class="bg-white border-b p-4 sticky top-0 z-10">
+            <div class="max-w-3xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-slate-900 text-white p-2 rounded-full">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm" id="op-header-nome">Nome do Operador</p>
+                        <p class="text-xs text-gray-500" id="op-header-setor">Setor</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="text-sm text-red-600 font-medium hover:bg-red-50 px-3 py-2 rounded-md transition-colors">Sair</button>
+            </div>
+        </header>
+
+        <div class="max-w-3xl mx-auto p-4 space-y-6">
+            <!-- Notification -->
+            <div id="op-notification" class="hidden bg-green-100 border border-green-200 text-green-800 p-4 rounded-lg flex items-start gap-3 animate-pulse">
+                <i data-lucide="check-circle-2" class="w-5 h-5 mt-0.5"></i>
+                <div>
+                    <h3 class="font-bold">Manutenção Concluída!</h3>
+                    <p class="text-sm">Sua solicitação para <span id="notif-maquina" class="font-bold">Máquina X</span> foi finalizada.</p>
+                    <button onclick="dismissNotification()" class="text-xs underline mt-2">Dispensar</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg border shadow-sm p-6">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <i data-lucide="plus-circle" class="text-blue-700 w-6 h-6"></i>
+                    </div>
+                    <h2 class="text-xl font-bold">Nova Solicitação</h2>
+                </div>
+
+                <!-- Machine Validation -->
+                <div class="bg-slate-50 p-4 rounded-lg border mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="space-y-1">
+                            <span class="text-sm text-gray-500">Máquina Atual</span>
+                            <p class="font-bold text-lg flex items-center gap-2">
+                                <i data-lucide="monitor" class="w-4 h-4 text-gray-400"></i>
+                                <span id="op-maquina-display">Carregando...</span>
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm text-gray-500">Setor</span>
+                            <p class="font-medium" id="op-setor-display">Carregando...</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-t pt-4">
+                        <label class="text-sm font-medium">Você é operador desta máquina?</label>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleMachine(true)" id="btn-sim" class="px-3 py-1.5 rounded-md text-sm font-medium bg-slate-900 text-white">Sim</button>
+                            <button onclick="toggleMachine(false)" id="btn-nao" class="px-3 py-1.5 rounded-md text-sm font-medium bg-white border text-gray-600">Não</button>
+                        </div>
+                    </div>
+
+                    <div id="qr-section" class="hidden mt-4 pt-4 border-t">
+                        <button onclick="scanQR()" id="btn-scan" class="w-full py-8 border-2 border-dashed border-blue-300 bg-blue-50 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-blue-100 transition-colors text-blue-700">
+                            <i data-lucide="qr-code" class="w-8 h-8"></i>
+                            <span class="font-medium">Ler QR Code da Máquina</span>
+                        </button>
+                        <div id="scan-loading" class="hidden text-center py-4 text-blue-600">
+                            <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i>
+                            Lendo código...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Prioridade</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="prioridade" value="C" class="peer sr-only" checked>
+                                <div class="p-3 rounded-md border-2 text-center peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
+                                    <div class="font-bold text-blue-700">Baixa</div>
+                                    <div class="text-xs text-gray-500">Pode aguardar</div>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="prioridade" value="B" class="peer sr-only">
+                                <div class="p-3 rounded-md border-2 text-center peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                    <div class="font-bold text-orange-700">Média</div>
+                                    <div class="text-xs text-gray-500">Afeta produção</div>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="prioridade" value="A" class="peer sr-only">
+                                <div class="p-3 rounded-md border-2 text-center peer-checked:border-red-500 peer-checked:bg-red-50 transition-all">
+                                    <div class="font-bold text-red-600 flex items-center justify-center gap-1">
+                                        <i data-lucide="siren" class="w-3 h-3"></i> Urgente
+                                    </div>
+                                    <div class="text-xs text-gray-500">Parada total</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Descrição do Problema</label>
+                        <textarea id="op-descricao" class="w-full p-3 border rounded-md h-32 focus:ring-2 focus:ring-slate-900 outline-none" placeholder="Descreva o que está acontecendo..."></textarea>
+                    </div>
+
+                    <button onclick="submitSolicitacao()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-bold shadow-md transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Enviar Solicitação
+                    </button>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div class="bg-white rounded-lg border shadow-sm overflow-hidden">
+                <div class="p-4 border-b bg-gray-50">
+                    <h3 class="font-bold text-gray-700">Minhas Solicitações</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                            <tr>
+                                <th class="px-4 py-3">Data</th>
+                                <th class="px-4 py-3">Máquina</th>
+                                <th class="px-4 py-3">Problema</th>
+                                <th class="px-4 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="op-history-body">
+                            <!-- JS fills this -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAINTENANCE SCREEN -->
+    <div id="screen-manutencao" class="hidden min-h-screen bg-gray-50">
+        <div class="max-w-6xl mx-auto p-6">
+            <header class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900">Dashboard de Manutenção</h1>
+                    <p class="text-gray-500">Gestão de solicitações em tempo real</p>
+                </div>
+                <button onclick="logout()" class="text-red-600 font-medium hover:bg-red-50 px-4 py-2 rounded-md">Sair</button>
+            </header>
+
+            <!-- KPI Cards -->
+            <div class="grid md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white p-6 rounded-lg border-2 border-yellow-400 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Pendentes</p>
+                            <p class="text-3xl font-bold" id="kpi-pendente">0</p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <i data-lucide="clock" class="text-yellow-600 w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-blue-400 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Em Andamento</p>
+                            <p class="text-3xl font-bold" id="kpi-andamento">0</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i data-lucide="hammer" class="text-blue-600 w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg border-2 border-green-400 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Concluídas</p>
+                            <p class="text-3xl font-bold" id="kpi-concluida">0</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i data-lucide="check-circle-2" class="text-green-600 w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex gap-2 mb-6">
+                <button onclick="filterStatus('todas')" class="px-4 py-2 rounded-md text-sm font-medium bg-slate-900 text-white">Todas</button>
+                <button onclick="filterStatus('pendente')" class="px-4 py-2 rounded-md text-sm font-medium bg-white border hover:bg-gray-50">Pendentes</button>
+                <button onclick="filterStatus('em_andamento')" class="px-4 py-2 rounded-md text-sm font-medium bg-white border hover:bg-gray-50">Em Andamento</button>
+                <button onclick="filterStatus('concluida')" class="px-4 py-2 rounded-md text-sm font-medium bg-white border hover:bg-gray-50">Concluídas</button>
+            </div>
+
+            <!-- Request List -->
+            <div class="grid gap-4" id="man-list">
+                <!-- JS Fills this -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // MOCK DATA
+        const operadores = [
+            { id: "1", nome: "João Silva", setor: "Fundição", maquina: "Forno 01" },
+            { id: "2", nome: "Maria Santos", setor: "Laminação", maquina: "Laminador 03" },
+            { id: "3", nome: "Pedro Costa", setor: "Fundição", maquina: "Forno 02" },
+            { id: "4", nome: "Ana Oliveira", setor: "Laminação", maquina: "Laminador 01" },
+            { id: "5", nome: "Carlos Souza", setor: "Acabamento", maquina: "Serra 02" },
+        ];
+
+        const maquinas = [
+            { nome: "Prensa 01", setor: "Acabamento" },
+            { nome: "Extrusora 02", setor: "Extrusão" },
+            { nome: "Forno 05", setor: "Fundição" }
+        ];
+
+        // APP STATE
+        let currentUser = null;
+        let requests = JSON.parse(localStorage.getItem('vanilla_requests')) || [
+            { id: "1", operadorId: "1", operadorNome: "João Silva", setor: "Fundição", maquina: "Forno 01", descricao: "Temperatura instável", status: "pendente", prioridade: "A", data: new Date().toISOString() },
+            { id: "2", operadorId: "2", operadorNome: "Maria Santos", setor: "Laminação", maquina: "Laminador 03", descricao: "Ruído no rolamento", status: "em_andamento", prioridade: "B", data: new Date(Date.now() - 3600000).toISOString() }
+        ];
+
+        // NAVIGATION
+        function showScreen(screenId) {
+            document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function switchTab(tab) {
+            if(tab === 'operador') {
+                document.getElementById('tab-operador').className = "p-4 font-medium text-center bg-slate-900 text-white transition-colors";
+                document.getElementById('tab-encarregado').className = "p-4 font-medium text-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors";
+                document.getElementById('form-operador').classList.remove('hidden');
+                document.getElementById('form-encarregado').classList.add('hidden');
+            } else {
+                document.getElementById('tab-operador').className = "p-4 font-medium text-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors";
+                document.getElementById('tab-encarregado').className = "p-4 font-medium text-center bg-slate-900 text-white transition-colors";
+                document.getElementById('form-operador').classList.add('hidden');
+                document.getElementById('form-encarregado').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            showScreen('screen-login');
+            document.getElementById('matricula').value = '';
+            document.getElementById('usuario').value = '';
+            document.getElementById('senha').value = '';
+        }
+
+        // LOGIN LOGIC
+        function loginOperador() {
+            const mat = document.getElementById('matricula').value;
+            const op = operadores.find(o => o.id === mat);
+            
+            if(op) {
+                currentUser = { type: 'operador', ...op };
+                document.getElementById('error-operador').classList.add('hidden');
+                initOperadorScreen();
+                showScreen('screen-operador');
+            } else {
+                document.getElementById('error-operador').classList.remove('hidden');
+            }
+        }
+
+        function loginEncarregado() {
+            const user = document.getElementById('usuario').value;
+            const pass = document.getElementById('senha').value;
+            
+            if(user && pass === '123456') {
+                currentUser = { type: 'encarregado', nome: 'Encarregado' };
+                document.getElementById('error-encarregado').classList.add('hidden');
+                initManutencaoScreen();
+                showScreen('screen-manutencao');
+            } else {
+                document.getElementById('error-encarregado').classList.remove('hidden');
+            }
+        }
+
+        // OPERATOR LOGIC
+        let currentMachine = {};
+
+        function initOperadorScreen() {
+            document.getElementById('op-header-nome').innerText = currentUser.nome;
+            document.getElementById('op-header-setor').innerText = currentUser.setor;
+            currentMachine = { nome: currentUser.maquina, setor: currentUser.setor };
+            updateMachineDisplay();
+            toggleMachine(true);
+            renderHistory();
+            startNotificationCheck();
+        }
+
+        function updateMachineDisplay() {
+            document.getElementById('op-maquina-display').innerText = currentMachine.nome;
+            document.getElementById('op-setor-display').innerText = currentMachine.setor;
+        }
+
+        function toggleMachine(isMyMachine) {
+            const btnSim = document.getElementById('btn-sim');
+            const btnNao = document.getElementById('btn-nao');
+            const qrSection = document.getElementById('qr-section');
+
+            if(isMyMachine) {
+                btnSim.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-slate-900 text-white";
+                btnNao.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-white border text-gray-600";
+                qrSection.classList.add('hidden');
+                // Reset to default
+                currentMachine = { nome: currentUser.maquina, setor: currentUser.setor };
+                updateMachineDisplay();
+            } else {
+                btnSim.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-white border text-gray-600";
+                btnNao.className = "px-3 py-1.5 rounded-md text-sm font-medium bg-slate-900 text-white";
+                qrSection.classList.remove('hidden');
+            }
+        }
+
+        function scanQR() {
+            document.getElementById('btn-scan').classList.add('hidden');
+            document.getElementById('scan-loading').classList.remove('hidden');
+            
+            setTimeout(() => {
+                // Simula leitura
+                const randomMachine = maquinas[Math.floor(Math.random() * maquinas.length)];
+                currentMachine = randomMachine;
+                updateMachineDisplay();
+                
+                document.getElementById('scan-loading').classList.add('hidden');
+                document.getElementById('btn-scan').classList.remove('hidden');
+                document.getElementById('qr-section').classList.add('hidden');
+                // Mantém botão "Não" selecionado mas esconde QR pois já leu
+            }, 1500);
+        }
+
+        function submitSolicitacao() {
+            const descricao = document.getElementById('op-descricao').value;
+            const prioridade = document.querySelector('input[name="prioridade"]:checked').value;
+            
+            if(!descricao) return alert("Descreva o problema");
+
+            const newReq = {
+                id: Date.now().toString(),
+                operadorId: currentUser.id,
+                operadorNome: currentUser.nome,
+                setor: currentMachine.setor,
+                maquina: currentMachine.nome,
+                descricao,
+                prioridade,
+                status: 'pendente',
+                data: new Date().toISOString()
+            };
+
+            requests.unshift(newReq);
+            saveRequests();
+            
+            document.getElementById('op-descricao').value = '';
+            alert("Solicitação enviada!");
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const tbody = document.getElementById('op-history-body');
+            const myRequests = requests.filter(r => r.operadorId === currentUser.id);
+            
+            tbody.innerHTML = myRequests.map(r => `
+                <tr class="bg-white border-b">
+                    <td class="px-4 py-3 text-gray-500">${new Date(r.data).toLocaleDateString('pt-BR')}</td>
+                    <td class="px-4 py-3 font-medium">${r.maquina}</td>
+                    <td class="px-4 py-3 text-gray-500 truncate max-w-[150px]">${r.descricao}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 rounded text-xs font-bold ${getStatusColor(r.status)}">
+                            ${getStatusLabel(r.status)}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // MAINTENANCE LOGIC
+        function initManutencaoScreen() {
+            renderDashboard('todas');
+        }
+
+        function filterStatus(status) {
+            renderDashboard(status);
+        }
+
+        function renderDashboard(filter) {
+            // KPIs
+            document.getElementById('kpi-pendente').innerText = requests.filter(r => r.status === 'pendente').length;
+            document.getElementById('kpi-andamento').innerText = requests.filter(r => r.status === 'em_andamento').length;
+            document.getElementById('kpi-concluida').innerText = requests.filter(r => r.status === 'concluida').length;
+
+            const container = document.getElementById('man-list');
+            const filtered = filter === 'todas' ? requests : requests.filter(r => r.status === filter);
+            
+            if(filtered.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">Nenhuma solicitação encontrada.</p>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(r => `
+                <div class="bg-white border-l-4 ${getPriorityBorder(r.prioridade)} p-4 rounded shadow-sm flex justify-between items-start">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            ${r.prioridade === 'A' ? '<span class="text-xs font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded animate-pulse-red flex gap-1 items-center"><i data-lucide="siren" class="w-3 h-3"></i> URGENTE</span>' : ''}
+                            <h3 class="font-bold text-lg">${r.maquina} <span class="text-sm font-normal text-gray-500">| ${r.setor}</span></h3>
+                        </div>
+                        <p class="text-gray-700 mb-2">${r.descricao}</p>
+                        <div class="text-xs text-gray-400">Por: ${r.operadorNome} • ${new Date(r.data).toLocaleString()}</div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold text-center ${getStatusColor(r.status)}">
+                            ${getStatusLabel(r.status)}
+                        </span>
+                        ${getActionButtons(r)}
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function getActionButtons(req) {
+            if(req.status === 'pendente') {
+                return `<button onclick="updateStatus('${req.id}', 'em_andamento')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded hover:bg-blue-100">Iniciar</button>`;
+            } else if(req.status === 'em_andamento') {
+                return `<button onclick="updateStatus('${req.id}', 'concluida')" class="text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded hover:bg-green-100">Concluir</button>`;
+            }
+            return '';
+        }
+
+        function updateStatus(id, newStatus) {
+            const req = requests.find(r => r.id === id);
+            if(req) {
+                req.status = newStatus;
+                saveRequests();
+                renderDashboard('todas'); // or keep filter
+            }
+        }
+
+        // HELPERS
+        function saveRequests() {
+            localStorage.setItem('vanilla_requests', JSON.stringify(requests));
+        }
+
+        function getStatusColor(status) {
+            const map = {
+                'pendente': 'bg-yellow-100 text-yellow-800',
+                'em_andamento': 'bg-blue-100 text-blue-800',
+                'concluida': 'bg-green-100 text-green-800'
+            };
+            return map[status] || 'bg-gray-100';
+        }
+
+        function getStatusLabel(status) {
+            return status.replace('_', ' ').toUpperCase();
+        }
+
+        function getPriorityBorder(p) {
+            return p === 'A' ? 'border-red-500' : (p === 'B' ? 'border-orange-400' : 'border-blue-400');
+        }
+
+        // NOTIFICATIONS
+        function startNotificationCheck() {
+            setInterval(() => {
+                if(currentUser && currentUser.type === 'operador') {
+                    const finished = requests.find(r => r.operadorId === currentUser.id && r.status === 'concluida' && !r.notified);
+                    if(finished) {
+                        document.getElementById('op-notification').classList.remove('hidden');
+                        document.getElementById('notif-maquina').innerText = finished.maquina;
+                        // Mark as notified locally just for this session to avoid annoying loop
+                        finished.notified = true; 
+                    }
+                }
+            }, 3000);
+        }
+
+        function dismissNotification() {
+            document.getElementById('op-notification').classList.add('hidden');
+        }
+
+        // INIT ICONS
+        lucide.createIcons();
+    </script>
+</body>
+</html>
