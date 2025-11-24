@@ -145,6 +145,10 @@ app.get('/api/debug/solicitacoes/colunas', (_req, res) => {
 
 const port = Number(process.env.API_PORT) || 3001;
 
+app.get('/', (req, res) => {
+  res.send('API de Manutenção Rodando! 🚀 Acesse o front-end em localhost:3000');
+});
+
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });

@@ -2,15 +2,17 @@ import Firebird from "node-firebird";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from 'uuid';
 
-
 dotenv.config();
 
 const dbConfig: Firebird.Options = {
-  host: process.env.FB_HOST!,
-  port: Number(process.env.FB_PORT!),
+  host: process.env.FB_HOST || 'localhost',
+  port: Number(process.env.FB_PORT) || 3050,
   database: process.env.FB_DATABASE!,
-  user: process.env.FB_USER!,
-  password: process.env.FB_PASSWORD!,
+  user: process.env.FB_USER || 'SYSDBA',
+  password: process.env.FB_PASSWORD || 'masterkey',
+  lowercase_keys: false,
+  role: undefined,
+  pageSize: 4096
 };
 
 const pool = Firebird.pool(10, dbConfig);
@@ -20,9 +22,8 @@ export const SolicitacoesService = {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
-
-        const sql = `SELECT * FROM SOLICITACOES`;
-
+        // Ordena por Data de Criação (mais recentes primeiro)
+        const sql = `SELECT * FROM SOLICITACOES ORDER BY DATA_CRIACAO DESC`;
         db.query(sql, [], (e, result) => {
           db.detach();
           if (e) return reject(e);
@@ -36,9 +37,7 @@ export const SolicitacoesService = {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
-
         const sql = `SELECT * FROM SOLICITACOES WHERE ID = ?`;
-
         db.query(sql, [id], (e, result) => {
           db.detach();
           if (e) return reject(e);
@@ -49,86 +48,76 @@ export const SolicitacoesService = {
   },
 
   create(data: any): Promise<any> {
-  return new Promise((resolve, reject) => {
-    pool.get((err, db) => {
-      if (err) return reject(err);
+    return new Promise((resolve, reject) => {
+      pool.get((err, db) => {
+        if (err) return reject(err);
 
-      const novoId = uuidv4();
-      const agora = new Date(); // <-- DATA_CRIACAO automática
+        const novoId = uuidv4();
+        const agora = new Date();
 
-      const sql = `
-        INSERT INTO SOLICITACOES (
-          ID,
-          OPERADOR_ID,
-          OPERADOR_NOME,
-          SETOR,
-          MAQUINA,
-          DESCRICAO,
-          STATUS,
-          PRIORIDADE,
-          DATA_CRIACAO,
-          DATA_ATUALIZACAO
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
+        const sql = `
+          INSERT INTO SOLICITACOES (
+            ID,
+            OPERADOR_ID,
+            OPERADOR_NOME,
+            SETOR,
+            MAQUINA,
+            DESCRICAO,
+            STATUS,
+            PRIORIDADE,
+            TIPO_SERVICO,
+            DATA_CRIACAO,
+            DATA_ATUALIZACAO,
+            OBSERVACOES
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
 
-      const params = [
-        novoId,
-        data.OPERADOR_ID,
-        data.OPERADOR_NOME,
-        data.SETOR,
-        data.MAQUINA,
-        data.DESCRICAO,
-        data.STATUS,
-        data.PRIORIDADE,
-        agora,             // <-- DATA_CRIACAO automático
-        data.DATA_ATUALIZACAO // ainda vem do frontend
-      ];
+        const params = [
+          novoId,
+          data.operadorId,
+          data.operadorNome,
+          data.setor,
+          data.maquina,
+          data.descricao,
+          data.status || 'pendente',
+          data.prioridade || 'C',
+          data.tipoServico || 'Mecânica',
+          agora,
+          null,
+          data.observacoes || ''
+        ];
 
-      db.query(sql, params, (e) => {
-        db.detach();
-        if (e) return reject(e);
-
-        resolve({
-          ok: true,
-          id_gerado: novoId,
-          data_criacao: agora
+        db.query(sql, params, (e) => {
+          db.detach();
+          if (e) return reject(e);
+          resolve({ ok: true, id: novoId });
         });
       });
     });
-  });
-},
+  },
 
   update(id: string, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
 
+        const agora = new Date();
         const sql = `
           UPDATE SOLICITACOES SET
-            ID_DO_OPERADOR = ?,
-            NOME_DO_OPERADOR = ?,
-            SETOR = ?,
-            MÁQUINA = ?,
-            DESCRIÇÃO = ?,
             STATUS = ?,
-            PRIORIDADE = ?,
-            ATUALIZAÇÃO_DE_DADOS = ?
+            DATA_ATUALIZACAO = ?,
+            OBSERVACOES = ?
           WHERE ID = ?
         `;
 
         const params = [
-          data.ID_DO_OPERADOR,
-          data.NOME_DO_OPERADOR,
-          data.SETOR,
-          data.MAQUINA,
-          data.DESCRICAO,
-          data.STATUS,
-          data.PRIORIDADE,
-          data.ATUALIZACAO_DE_DADOS,
+          data.status,
+          agora,
+          data.observacoes,
           id,
         ];
 
-        db.query(sql, params, (e, result) => {
+        db.query(sql, params, (e) => {
           db.detach();
           if (e) return reject(e);
           resolve({ ok: true });
@@ -141,10 +130,8 @@ export const SolicitacoesService = {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
-
         const sql = `DELETE FROM SOLICITACOES WHERE ID = ?`;
-
-        db.query(sql, [id], (e, result) => {
+        db.query(sql, [id], (e) => {
           db.detach();
           if (e) return reject(e);
           resolve({ ok: true });

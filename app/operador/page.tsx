@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { ApiService } from "@/lib/api.service";
+import type React from "react";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -18,110 +25,136 @@ import {
   RefreshCw,
   AlertTriangle,
   Info,
-} from "lucide-react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   operadores,
   type Solicitacao,
   solicitacoesIniciais,
   type PrioridadeSolicitacao,
   type TipoServico,
-} from "@/lib/data"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Switch } from "@/components/ui/switch"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { MaintenanceFilters } from "@/components/maintenance-filters"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/lib/data";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { MaintenanceFilters } from "@/components/maintenance-filters";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function OperadorPage() {
-  const router = useRouter()
-  const [operadorSelecionado, setOperadorSelecionado] = useState<string>("")
-  const [descricao, setDescricao] = useState("")
-  const [prioridade, setPrioridade] = useState<PrioridadeSolicitacao>("B")
-  const [tipoServico, setTipoServico] = useState<TipoServico>("Mecânica")
-  const [solicitacaoEnviada, setSolicitacaoEnviada] = useState(false)
-  const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([])
-  const [solicitacoesExibidas, setSolicitacoesExibidas] = useState<Solicitacao[]>([])
-  const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([])
-  const [isMinhaMaquina, setIsMinhaMaquina] = useState(true)
-  const [maquinaAtual, setMaquinaAtual] = useState({ nome: "", setor: "" })
-  const [scanning, setScanning] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter();
+  const [operadorSelecionado, setOperadorSelecionado] = useState<string>("");
+  const [descricao, setDescricao] = useState("");
+  const [prioridade, setPrioridade] = useState<PrioridadeSolicitacao>("B");
+  const [tipoServico, setTipoServico] = useState<TipoServico>("Mecânica");
+  const [solicitacaoEnviada, setSolicitacaoEnviada] = useState(false);
+  const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
+  const [solicitacoesExibidas, setSolicitacoesExibidas] = useState<
+    Solicitacao[]
+  >([]);
+  const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
+  const [isMinhaMaquina, setIsMinhaMaquina] = useState(true);
+  const [maquinaAtual, setMaquinaAtual] = useState({ nome: "", setor: "" });
+  const [scanning, setScanning] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleToggleMaquina = (checked: boolean) => {
-    setIsMinhaMaquina(checked)
-  }
+    setIsMinhaMaquina(checked);
+  };
 
   const handleScanQRCode = () => {
-    setScanning(true)
+    setScanning(true);
     // Simulate QR code scanning
     setTimeout(() => {
-      setScanning(false)
-      setMaquinaAtual({ nome: "Maquina1", setor: "Setor1" }) // Example QR code result
-    }, 2000)
-  }
+      setScanning(false);
+      setMaquinaAtual({ nome: "Maquina1", setor: "Setor1" }); // Example QR code result
+    }, 2000);
+  };
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId")
-    const userType = localStorage.getItem("userType")
+    const userId = localStorage.getItem("userId");
+    const userType = localStorage.getItem("userType");
 
     if (!userId || userType !== "operador") {
-      router.push("/")
-      return
+      router.push("/");
+      return;
     }
 
-    setOperadorSelecionado(userId)
-    setIsLoading(false)
-  }, [router])
+    setOperadorSelecionado(userId);
+    setIsLoading(false);
+  }, [router]);
 
-  const operadorAtual = operadores.find((op) => op.id === operadorSelecionado)
+  const operadorAtual = operadores.find((op) => op.id === operadorSelecionado);
 
   useEffect(() => {
     if (operadorAtual && isMinhaMaquina) {
-      setMaquinaAtual({ nome: operadorAtual.maquina, setor: operadorAtual.setor })
+      setMaquinaAtual({
+        nome: operadorAtual.maquina,
+        setor: operadorAtual.setor,
+      });
     }
-  }, [operadorAtual, isMinhaMaquina])
+  }, [operadorAtual, isMinhaMaquina]);
 
   useEffect(() => {
     const carregarDados = () => {
       if (!operadorSelecionado) {
-        setSolicitacoes([])
-        setSolicitacoesExibidas([])
-        setNotificacoes([])
-        return
+        setSolicitacoes([]);
+        setSolicitacoesExibidas([]);
+        setNotificacoes([]);
+        return;
       }
 
-      const storedData = localStorage.getItem("solicitacoes")
-      const todasSolicitacoes: Solicitacao[] = storedData ? JSON.parse(storedData) : solicitacoesIniciais
+      const storedData = localStorage.getItem("solicitacoes");
+      const todasSolicitacoes: Solicitacao[] = storedData
+        ? JSON.parse(storedData)
+        : solicitacoesIniciais;
 
       const solicitacoesComTipo = todasSolicitacoes.map((s) => ({
         ...s,
         tipoServico: s.tipoServico || "Mecânica",
-      }))
+      }));
 
       const minhasSolicitacoes = solicitacoesComTipo
         .filter((s) => s.operadorId === operadorSelecionado)
-        .sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime())
+        .sort(
+          (a, b) =>
+            new Date(b.dataCriacao).getTime() -
+            new Date(a.dataCriacao).getTime()
+        );
 
-      setSolicitacoes(minhasSolicitacoes)
+      setSolicitacoes(minhasSolicitacoes);
 
       if (solicitacoesExibidas.length === 0 && minhasSolicitacoes.length > 0) {
-        setSolicitacoesExibidas(minhasSolicitacoes)
+        setSolicitacoesExibidas(minhasSolicitacoes);
       }
 
-      const novasNotificacoes = minhasSolicitacoes.filter((s) => s.status === "concluida")
-      setNotificacoes(novasNotificacoes)
-    }
+      const novasNotificacoes = minhasSolicitacoes.filter(
+        (s) => s.status === "concluida"
+      );
+      setNotificacoes(novasNotificacoes);
+    };
 
-    carregarDados()
-    const interval = setInterval(carregarDados, 2000)
+    carregarDados();
+    const interval = setInterval(carregarDados, 2000);
 
-    return () => clearInterval(interval)
-  }, [operadorSelecionado])
+    return () => clearInterval(interval);
+  }, [operadorSelecionado]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -133,74 +166,77 @@ export default function OperadorPage() {
           >
             Pendente
           </Badge>
-        )
+        );
       case "em_andamento":
         return (
           <Badge variant="default" className="bg-blue-500 hover:bg-blue-600">
             Em Andamento
           </Badge>
-        )
+        );
       case "concluida":
         return (
           <Badge variant="default" className="bg-green-500 hover:bg-green-600">
             Concluída
           </Badge>
-        )
+        );
       case "cancelada":
-        return <Badge variant="destructive">Cancelada</Badge>
+        return <Badge variant="destructive">Cancelada</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>
+        return <Badge variant="outline">{status}</Badge>;
     }
-  }
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     if (!operadorSelecionado || !descricao.trim() || !maquinaAtual.nome) {
-      alert("Por favor, preencha todos os campos obrigatórios.")
-      return
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
-    setTimeout(() => {
-      const novaSolicitacao: Solicitacao = {
-        id: Date.now().toString(),
+    try {
+      // Preparar objeto para envio
+      const novaSolicitacao = {
         operadorId: operadorSelecionado,
-        operadorNome: operadorAtual?.nome || "",
+        operadorNome: operadorAtual?.nome || "Desconhecido",
         setor: maquinaAtual.setor,
         maquina: maquinaAtual.nome,
         descricao: descricao,
-        status: "pendente",
         prioridade: prioridade,
         tipoServico: tipoServico,
-        dataCriacao: new Date().toISOString(),
-      }
+        status: "pendente",
+      };
 
-      const solicitacoesExistentes = JSON.parse(localStorage.getItem("solicitacoes") || "[]")
-      const novasSolicitacoes = [...solicitacoesExistentes, novaSolicitacao]
+      // Chamada real para o Back-end
+      await ApiService.create(novaSolicitacao);
 
-      if (!localStorage.getItem("solicitacoes")) {
-        novasSolicitacoes.push(...solicitacoesIniciais)
-      }
+      // Sucesso
+      setSolicitacaoEnviada(true);
 
-      localStorage.setItem("solicitacoes", JSON.stringify(novasSolicitacoes))
-
-      setSolicitacaoEnviada(true)
-      setIsSubmitting(false)
-
+      // Limpar formulário após delay (mantendo sua UX original)
       setTimeout(() => {
-        setSolicitacaoEnviada(false)
-        setDescricao("")
-        setPrioridade("B")
-        setTipoServico("Mecânica")
-        setIsMinhaMaquina(true)
+        setSolicitacaoEnviada(false);
+        setDescricao("");
+        setPrioridade("B");
+        setTipoServico("Mecânica");
+        setIsMinhaMaquina(true);
         if (operadorAtual) {
-          setMaquinaAtual({ nome: operadorAtual.maquina, setor: operadorAtual.setor })
+          setMaquinaAtual({
+            nome: operadorAtual.maquina,
+            setor: operadorAtual.setor,
+          });
         }
-      }, 3000)
-    }, 1500) // 1.5 second delay to simulate submission
-  }
+        // Recarregar lista para mostrar a nova solicitação no histórico
+        // Você pode criar uma função carregarDados() fora do useEffect para chamar aqui também
+      }, 2000);
+    } catch (error) {
+      alert("Erro ao enviar solicitação. Verifique a conexão com o servidor.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -210,7 +246,7 @@ export default function OperadorPage() {
           <p className="text-muted-foreground">Carregando...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!operadorAtual) {
@@ -228,7 +264,7 @@ export default function OperadorPage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -254,20 +290,29 @@ export default function OperadorPage() {
             <Wrench className="size-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Solicitar Manutenção</h1>
-            <p className="text-muted-foreground">Preencha os dados para solicitar manutenção</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+              Solicitar Manutenção
+            </h1>
+            <p className="text-muted-foreground">
+              Preencha os dados para solicitar manutenção
+            </p>
           </div>
         </div>
 
         {operadorSelecionado && notificacoes.length > 0 && (
           <Alert className="mb-6 border-green-500/50 bg-green-500/10">
             <Bell className="size-4 text-green-600" />
-            <AlertTitle className="text-green-700 font-bold flex items-center gap-2">Manutenção Concluída!</AlertTitle>
+            <AlertTitle className="text-green-700 font-bold flex items-center gap-2">
+              Manutenção Concluída!
+            </AlertTitle>
             <AlertDescription className="text-green-700">
-              Você tem {notificacoes.length} solicitação(ões) marcada(s) como concluída(s).
+              Você tem {notificacoes.length} solicitação(ões) marcada(s) como
+              concluída(s).
               <div className="mt-2 text-xs font-medium">
                 Última: {notificacoes[0].maquina} -{" "}
-                {new Date(notificacoes[0].dataAtualizacao || notificacoes[0].dataCriacao).toLocaleDateString()}
+                {new Date(
+                  notificacoes[0].dataAtualizacao || notificacoes[0].dataCriacao
+                ).toLocaleDateString()}
               </div>
             </AlertDescription>
           </Alert>
@@ -276,19 +321,38 @@ export default function OperadorPage() {
         <Card className="border-2">
           <CardHeader>
             <CardTitle>Nova Solicitação</CardTitle>
-            <CardDescription>Informe o problema encontrado na máquina</CardDescription>
+            <CardDescription>
+              Informe o problema encontrado na máquina
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="p-4 bg-secondary/30 rounded-lg border space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label className="text-base font-semibold">Você é operador desta máquina?</Label>
+                  <Label className="text-base font-semibold">
+                    Você é operador desta máquina?
+                  </Label>
                   <div className="flex items-center gap-2">
-                    <span className={`text-sm ${!isMinhaMaquina ? "font-bold text-primary" : "text-muted-foreground"}`}>
+                    <span
+                      className={`text-sm ${
+                        !isMinhaMaquina
+                          ? "font-bold text-primary"
+                          : "text-muted-foreground"
+                      }`}
+                    >
                       Não
                     </span>
-                    <Switch checked={isMinhaMaquina} onCheckedChange={handleToggleMaquina} />
-                    <span className={`text-sm ${isMinhaMaquina ? "font-bold text-primary" : "text-muted-foreground"}`}>
+                    <Switch
+                      checked={isMinhaMaquina}
+                      onCheckedChange={handleToggleMaquina}
+                    />
+                    <span
+                      className={`text-sm ${
+                        isMinhaMaquina
+                          ? "font-bold text-primary"
+                          : "text-muted-foreground"
+                      }`}
+                    >
                       Sim
                     </span>
                   </div>
@@ -297,12 +361,20 @@ export default function OperadorPage() {
                 {isMinhaMaquina ? (
                   <div className="grid md:grid-cols-2 gap-4 pt-2">
                     <div>
-                      <Label className="text-sm text-muted-foreground">Setor</Label>
-                      <p className="text-lg font-semibold mt-1">{operadorAtual.setor}</p>
+                      <Label className="text-sm text-muted-foreground">
+                        Setor
+                      </Label>
+                      <p className="text-lg font-semibold mt-1">
+                        {operadorAtual.setor}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm text-muted-foreground">Máquina</Label>
-                      <p className="text-lg font-semibold mt-1">{operadorAtual.maquina}</p>
+                      <Label className="text-sm text-muted-foreground">
+                        Máquina
+                      </Label>
+                      <p className="text-lg font-semibold mt-1">
+                        {operadorAtual.maquina}
+                      </p>
                     </div>
                   </div>
                 ) : (
@@ -313,7 +385,12 @@ export default function OperadorPage() {
                         <p className="text-muted-foreground mb-4 text-center">
                           Escaneie o QR Code da máquina para identificar
                         </p>
-                        <Button type="button" onClick={handleScanQRCode} disabled={scanning} className="gap-2">
+                        <Button
+                          type="button"
+                          onClick={handleScanQRCode}
+                          disabled={scanning}
+                          className="gap-2"
+                        >
                           {scanning ? (
                             <>
                               <RefreshCw className="size-4 animate-spin" />
@@ -332,13 +409,17 @@ export default function OperadorPage() {
                         <div className="flex items-center justify-between bg-green-500/10 p-3 rounded border border-green-500/20">
                           <div className="flex items-center gap-2 text-green-700">
                             <CheckCircle2 className="size-5" />
-                            <span className="font-medium">Máquina Identificada</span>
+                            <span className="font-medium">
+                              Máquina Identificada
+                            </span>
                           </div>
                           <Button
                             type="button"
                             variant="ghost"
                             size="sm"
-                            onClick={() => setMaquinaAtual({ nome: "", setor: "" })}
+                            onClick={() =>
+                              setMaquinaAtual({ nome: "", setor: "" })
+                            }
                             className="text-xs h-8"
                           >
                             Escanear Outra
@@ -346,12 +427,20 @@ export default function OperadorPage() {
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label className="text-sm text-muted-foreground">Setor Identificado</Label>
-                            <p className="text-lg font-semibold mt-1">{maquinaAtual.setor}</p>
+                            <Label className="text-sm text-muted-foreground">
+                              Setor Identificado
+                            </Label>
+                            <p className="text-lg font-semibold mt-1">
+                              {maquinaAtual.setor}
+                            </p>
                           </div>
                           <div>
-                            <Label className="text-sm text-muted-foreground">Máquina Identificada</Label>
-                            <p className="text-lg font-semibold mt-1">{maquinaAtual.nome}</p>
+                            <Label className="text-sm text-muted-foreground">
+                              Máquina Identificada
+                            </Label>
+                            <p className="text-lg font-semibold mt-1">
+                              {maquinaAtual.nome}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -361,11 +450,15 @@ export default function OperadorPage() {
               </div>
 
               <div className="space-y-3">
-                <Label className="text-base font-semibold">Prioridade da Manutenção *</Label>
+                <Label className="text-base font-semibold">
+                  Prioridade da Manutenção *
+                </Label>
                 <div className="p-4 bg-background border rounded-lg">
                   <RadioGroup
                     value={prioridade}
-                    onValueChange={(value) => setPrioridade(value as PrioridadeSolicitacao)}
+                    onValueChange={(value) =>
+                      setPrioridade(value as PrioridadeSolicitacao)
+                    }
                     className="grid gap-4"
                   >
                     <div className="flex items-center space-x-3 p-3 rounded-md border-2 border-transparent hover:bg-secondary/50 transition-colors has-[:checked]:border-destructive/50 has-[:checked]:bg-destructive/5">
@@ -389,7 +482,11 @@ export default function OperadorPage() {
                     </div>
 
                     <div className="flex items-center space-x-3 p-3 rounded-md border-2 border-transparent hover:bg-secondary/50 transition-colors has-[:checked]:border-warning/50 has-[:checked]:bg-warning/5">
-                      <RadioGroupItem value="B" id="prioridade-b" className="text-warning border-warning shrink-0" />
+                      <RadioGroupItem
+                        value="B"
+                        id="prioridade-b"
+                        className="text-warning border-warning shrink-0"
+                      />
                       <div className="flex-1">
                         <Label
                           htmlFor="prioridade-b"
@@ -405,7 +502,11 @@ export default function OperadorPage() {
                     </div>
 
                     <div className="flex items-center space-x-3 p-3 rounded-md border-2 border-transparent hover:bg-secondary/50 transition-colors has-[:checked]:border-primary/50 has-[:checked]:bg-primary/5">
-                      <RadioGroupItem value="C" id="prioridade-c" className="text-primary border-primary shrink-0" />
+                      <RadioGroupItem
+                        value="C"
+                        id="prioridade-c"
+                        className="text-primary border-primary shrink-0"
+                      />
                       <div className="flex-1">
                         <Label
                           htmlFor="prioridade-c"
@@ -424,8 +525,15 @@ export default function OperadorPage() {
               </div>
 
               <div className="space-y-3">
-                <Label className="text-base font-semibold">Tipo de Serviço *</Label>
-                <Select value={tipoServico} onValueChange={(value) => setTipoServico(value as TipoServico)}>
+                <Label className="text-base font-semibold">
+                  Tipo de Serviço *
+                </Label>
+                <Select
+                  value={tipoServico}
+                  onValueChange={(value) =>
+                    setTipoServico(value as TipoServico)
+                  }
+                >
                   <SelectTrigger className="h-12 text-base">
                     <SelectValue placeholder="Selecione o tipo de serviço" />
                   </SelectTrigger>
@@ -445,7 +553,8 @@ export default function OperadorPage() {
                   </SelectContent>
                 </Select>
                 <p className="text-sm text-muted-foreground">
-                  Selecione se o problema é mecânico (peças, rolamentos, etc.) ou elétrico (motores, sensores, etc.)
+                  Selecione se o problema é mecânico (peças, rolamentos, etc.)
+                  ou elétrico (motores, sensores, etc.)
                 </p>
               </div>
 
@@ -471,7 +580,12 @@ export default function OperadorPage() {
                   type="submit"
                   size="lg"
                   className="flex-1 text-base font-semibold h-12 transition-all duration-300"
-                  disabled={!operadorSelecionado || !descricao.trim() || !maquinaAtual.nome || isSubmitting}
+                  disabled={
+                    !operadorSelecionado ||
+                    !descricao.trim() ||
+                    !maquinaAtual.nome ||
+                    isSubmitting
+                  }
                 >
                   {isSubmitting ? (
                     <div className="flex items-center gap-2 animate-in fade-in duration-300">
@@ -479,7 +593,9 @@ export default function OperadorPage() {
                       <span>Enviando...</span>
                     </div>
                   ) : (
-                    <span className="animate-in fade-in duration-300">Enviar Solicitação</span>
+                    <span className="animate-in fade-in duration-300">
+                      Enviar Solicitação
+                    </span>
                   )}
                 </Button>
                 <Button
@@ -488,12 +604,15 @@ export default function OperadorPage() {
                   size="lg"
                   className="text-base h-12 bg-transparent"
                   onClick={() => {
-                    setDescricao("")
-                    setPrioridade("B")
-                    setTipoServico("Mecânica")
-                    setIsMinhaMaquina(true)
+                    setDescricao("");
+                    setPrioridade("B");
+                    setTipoServico("Mecânica");
+                    setIsMinhaMaquina(true);
                     if (operadorAtual) {
-                      setMaquinaAtual({ nome: operadorAtual.maquina, setor: operadorAtual.setor })
+                      setMaquinaAtual({
+                        nome: operadorAtual.maquina,
+                        setor: operadorAtual.setor,
+                      });
                     }
                   }}
                   disabled={isSubmitting}
@@ -507,8 +626,9 @@ export default function OperadorPage() {
 
         <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
           <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">Dica:</strong> Em caso de emergência ou risco à segurança, contate
-            imediatamente o supervisor ou a equipe de segurança.
+            <strong className="text-foreground">Dica:</strong> Em caso de
+            emergência ou risco à segurança, contate imediatamente o supervisor
+            ou a equipe de segurança.
           </p>
         </div>
 
@@ -541,9 +661,13 @@ export default function OperadorPage() {
                       solicitacoesExibidas.map((solicitacao) => (
                         <TableRow key={solicitacao.id}>
                           <TableCell className="font-medium">
-                            {new Date(solicitacao.dataCriacao).toLocaleDateString()}
+                            {new Date(
+                              solicitacao.dataCriacao
+                            ).toLocaleDateString()}
                             <div className="text-xs text-muted-foreground">
-                              {new Date(solicitacao.dataCriacao).toLocaleTimeString([], {
+                              {new Date(
+                                solicitacao.dataCriacao
+                              ).toLocaleTimeString([], {
                                 hour: "2-digit",
                                 minute: "2-digit",
                               })}
@@ -558,15 +682,18 @@ export default function OperadorPage() {
                                 solicitacao.prioridade === "A"
                                   ? "text-destructive border-destructive/30 bg-destructive/5"
                                   : solicitacao.prioridade === "B"
-                                    ? "text-warning-foreground border-warning/30 bg-warning/5"
-                                    : "text-primary border-primary/30 bg-primary/5"
+                                  ? "text-warning-foreground border-warning/30 bg-warning/5"
+                                  : "text-primary border-primary/30 bg-primary/5"
                               }`}
                             >
                               Prioridade {solicitacao.prioridade}
                             </Badge>
                           </TableCell>
                           <TableCell className="max-w-[200px]">
-                            <div className="truncate" title={solicitacao.descricao}>
+                            <div
+                              className="truncate"
+                              title={solicitacao.descricao}
+                            >
                               {solicitacao.descricao}
                             </div>
                             {solicitacao.observacoes && (
@@ -578,12 +705,17 @@ export default function OperadorPage() {
                               </div>
                             )}
                           </TableCell>
-                          <TableCell>{getStatusBadge(solicitacao.status)}</TableCell>
+                          <TableCell>
+                            {getStatusBadge(solicitacao.status)}
+                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-6 text-muted-foreground">
+                        <TableCell
+                          colSpan={4}
+                          className="text-center py-6 text-muted-foreground"
+                        >
                           Nenhuma solicitação encontrada no histórico.
                         </TableCell>
                       </TableRow>
@@ -596,5 +728,5 @@ export default function OperadorPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
