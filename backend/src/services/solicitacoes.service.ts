@@ -17,37 +17,41 @@ const dbConfig: Firebird.Options = {
 
 const pool = Firebird.pool(10, dbConfig);
 
-// Função auxiliar para converter BLOB (Buffer) em Texto
+// --- NOVA FUNÇÃO DE CONVERSÃO ---
+// Essa função transforma os dados binários (BLOB) do Firebird em texto legível
 const converterBlobParaTexto = (row: any) => {
   if (!row) return row;
   
-  // Clona o objeto para não alterar a referência original
+  // Cria uma cópia para não travar o objeto original
   const novaLinha = { ...row };
 
-  // Se DESCRICAO for um Buffer, converte para String
+  // Converte a DESCRICAO se for Buffer
   if (novaLinha.DESCRICAO && Buffer.isBuffer(novaLinha.DESCRICAO)) {
-    novaLinha.DESCRICAO = novaLinha.DESCRICAO.toString('utf-8');
+    novaLinha.DESCRICAO = novaLinha.DESCRICAO.toString('utf-8'); // <--- O SEGREDO ESTÁ AQUI
   }
 
-  // Se OBSERVACOES for um Buffer, converte para String
+  // Converte a OBSERVACOES se for Buffer
   if (novaLinha.OBSERVACOES && Buffer.isBuffer(novaLinha.OBSERVACOES)) {
     novaLinha.OBSERVACOES = novaLinha.OBSERVACOES.toString('utf-8');
   }
 
   return novaLinha;
 };
+// -------------------------------
 
 export const SolicitacoesService = {
   getAll(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
+        
         const sql = `SELECT * FROM SOLICITACOES ORDER BY DATA_CRIACAO DESC`;
+        
         db.query(sql, [], (e, result) => {
           db.detach();
           if (e) return reject(e);
           
-          // AQUI ESTÁ A MÁGICA: Convertemos cada linha
+          // Aplica a conversão em cada linha retornada
           const dadosTratados = result.map(converterBlobParaTexto);
           
           resolve(dadosTratados);
@@ -60,7 +64,9 @@ export const SolicitacoesService = {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
+        
         const sql = `SELECT * FROM SOLICITACOES WHERE ID = ?`;
+        
         db.query(sql, [id], (e, result) => {
           db.detach();
           if (e) return reject(e);

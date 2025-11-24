@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import Firebird from 'node-firebird';
 import solicitacoesRoutes from "./routes/solicitacoes.routes";
 import { AuthController } from "./controllers/auth.controller"; // Importe o controller
+import authRoutes from "./routes/auth.routes";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/solicitacoes", solicitacoesRoutes);
+app.use("/api/auth", authRoutes); // Use as rotas de autenticação
 
 // Config Firebird
 const dbConfig: Firebird.Options = {

@@ -65,15 +65,15 @@ export const maquinas: Maquina[] = [
   { id: "4", nome: "Laminador 01", setor: "Laminação", codigo: "LAM-L01" },
   { id: "5", nome: "Laminador 02", setor: "Laminação", codigo: "LAM-L02" },
   { id: "6", nome: "Laminador 03", setor: "Laminação", codigo: "LAM-L03" },
-  { id: "7", nome: "Serra 01", setor: "Acabamento", codigo: "ACB-S01" },
-  { id: "8", nome: "Serra 02", setor: "Acabamento", codigo: "ACB-S02" },
-  { id: "9", nome: "Prensa 01", setor: "Acabamento", codigo: "ACB-P01" },
-  { id: "10", nome: "Prensa 02", setor: "Acabamento", codigo: "ACB-P02" }, // Added more machines for testing
+  { id: "7", nome: "Serra 01", setor: "Prensas", codigo: "ACB-S01" },
+  { id: "8", nome: "Serra 02", setor: "Prensas", codigo: "ACB-S02" },
+  { id: "9", nome: "Prensa 01", setor: "Prensas", codigo: "ACB-P01" },
+  { id: "10", nome: "Prensa 02", setor: "Prensas", codigo: "ACB-P02" }, // Added more machines for testing
   { id: "11", nome: "Extrusora 01", setor: "Extrusão", codigo: "EXT-E01" },
 ]
 
 // Mock data - Setores
-export const setores = ["Fundição", "Laminação", "Acabamento", "Manutenção", "Extrusão"] // Added Extrusão sector
+export const setores = ["Fundição", "Laminação", "Prensas", "Slitters", "Extrusão"] // Added Extrusão sector
 
 // Mock data - Solicitações (para teste)
 export const solicitacoesIniciais: Solicitacao[] = [
