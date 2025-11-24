@@ -112,7 +112,8 @@ export default function OperadorPage() {
   }, [operadorAtual, isMinhaMaquina]);
 
   useEffect(() => {
-    const carregarDados = () => {
+    const carregarDados = async () => {
+      // Se não tiver operador logado, limpa tudo e sai
       if (!operadorSelecionado) {
         setSolicitacoes([]);
         setSolicitacoesExibidas([]);
@@ -120,41 +121,62 @@ export default function OperadorPage() {
         return;
       }
 
-      const storedData = localStorage.getItem("solicitacoes");
-      const todasSolicitacoes: Solicitacao[] = storedData
-        ? JSON.parse(storedData)
-        : solicitacoesIniciais;
+      try {
+        // 1. Busca dados REAIS da API (substituindo o localStorage)
+        const dadosBrutos = await ApiService.getAll();
 
-      const solicitacoesComTipo = todasSolicitacoes.map((s) => ({
-        ...s,
-        tipoServico: s.tipoServico || "Mecânica",
-      }));
+        // 2. Mapeia as colunas do Firebird (MAIÚSCULAS) para o Front (camelCase)
+        // Isso é necessário porque o Firebird retorna OPERADOR_ID, mas o front espera operadorId
+        const todasSolicitacoes: Solicitacao[] = dadosBrutos.map((s: any) => ({
+          id: s.ID,
+          operadorId: s.OPERADOR_ID,
+          operadorNome: s.OPERADOR_NOME,
+          setor: s.SETOR,
+          maquina: s.MAQUINA,
+          descricao: s.DESCRICAO ? s.DESCRICAO.toString() : "", // Converte BLOB para string
+          status: s.STATUS || "pendente",
+          prioridade: s.PRIORIDADE || "C",
+          tipoServico: s.TIPO_SERVICO || "Mecânica",
+          dataCriacao: s.DATA_CRIACAO,
+          dataAtualizacao: s.DATA_ATUALIZACAO,
+          observacoes: s.OBSERVACOES ? s.OBSERVACOES.toString() : "",
+        }));
 
-      const minhasSolicitacoes = solicitacoesComTipo
-        .filter((s) => s.operadorId === operadorSelecionado)
-        .sort(
-          (a, b) =>
-            new Date(b.dataCriacao).getTime() -
-            new Date(a.dataCriacao).getTime()
+        // 3. Filtra apenas as solicitações deste operador
+        const minhasSolicitacoes = todasSolicitacoes
+          .filter((s) => s.operadorId === operadorSelecionado)
+          .sort(
+            (a, b) =>
+              new Date(b.dataCriacao).getTime() -
+              new Date(a.dataCriacao).getTime()
+          );
+
+        setSolicitacoes(minhasSolicitacoes);
+
+        // Atualiza a lista exibida se for a primeira carga ou se não houver filtro ativo
+        if (solicitacoesExibidas.length === 0) {
+          setSolicitacoesExibidas(minhasSolicitacoes);
+        } else {
+          // Opcional: Atualiza mantendo o contexto, mas para garantir sincronia:
+          setSolicitacoesExibidas(minhasSolicitacoes);
+        }
+
+        // 4. Verifica notificações (status "concluida")
+        const novasNotificacoes = minhasSolicitacoes.filter(
+          (s) => s.status === "concluida"
         );
-
-      setSolicitacoes(minhasSolicitacoes);
-
-      if (solicitacoesExibidas.length === 0 && minhasSolicitacoes.length > 0) {
-        setSolicitacoesExibidas(minhasSolicitacoes);
+        setNotificacoes(novasNotificacoes);
+      } catch (error) {
+        console.error("Erro ao carregar histórico do operador:", error);
       }
-
-      const novasNotificacoes = minhasSolicitacoes.filter(
-        (s) => s.status === "concluida"
-      );
-      setNotificacoes(novasNotificacoes);
     };
 
     carregarDados();
-    const interval = setInterval(carregarDados, 2000);
+    // Polling a cada 5 segundos para o operador saber quando a manutenção terminou
+    const interval = setInterval(carregarDados, 5000);
 
     return () => clearInterval(interval);
-  }, [operadorSelecionado]);
+  }, [operadorSelecionado]); // Removemos solicitacoesExibidas das dependências para evitar loop
 
   const getStatusBadge = (status: string) => {
     switch (status) {
