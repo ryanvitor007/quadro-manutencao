@@ -2,6 +2,7 @@
 
 const API_URL = "http://localhost:3001/api";
 
+// Definição do DTO para solicitações
 export interface SolicitacaoDTO {
   operadorId: string;
   operadorNome: string;
@@ -13,7 +14,27 @@ export interface SolicitacaoDTO {
   status?: string;
 }
 
+// Serviço para interagir com a API de solicitações
 export const ApiService = {
+
+  // Método de Login
+  async login(tipo: 'operador' | 'encarregado', login: string, senha?: string) {
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tipo, login, senha }),
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Erro no login");
+      return data;
+    } catch (error) {
+      console.error("Erro no login:", error);
+      throw error;
+    }
+  },
+
   // Buscar todas as solicitações
   async getAll() {
     try {

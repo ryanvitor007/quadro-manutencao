@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import Firebird from 'node-firebird';
 import solicitacoesRoutes from "./routes/solicitacoes.routes";
+import { AuthController } from "./controllers/auth.controller"; // Importe o controller
 
 dotenv.config();
 
@@ -147,6 +148,45 @@ const port = Number(process.env.API_PORT) || 3001;
 
 app.get('/', (req, res) => {
   res.send('API de Manutenção Rodando! 🚀 Acesse o front-end em localhost:3000');
+});
+
+// Rota de Instalação Automática da Tabela
+app.get('/api/setup/criar-tabela', (req, res) => {
+  pool.get((err, db) => {
+    if (err) {
+      return res.status(500).json({ erro: 'Erro de conexão com o Firebird', detalhes: err });
+    }
+
+    const sql = `
+      CREATE TABLE SOLICITACOES (
+        ID VARCHAR(36) NOT NULL PRIMARY KEY,
+        OPERADOR_ID VARCHAR(50),
+        OPERADOR_NOME VARCHAR(100),
+        SETOR VARCHAR(50),
+        MAQUINA VARCHAR(100),
+        DESCRICAO BLOB SUB_TYPE TEXT,
+        STATUS VARCHAR(20),
+        PRIORIDADE VARCHAR(1),
+        TIPO_SERVICO VARCHAR(50),
+        DATA_CRIACAO TIMESTAMP,
+        DATA_ATUALIZACAO TIMESTAMP,
+        OBSERVACOES BLOB SUB_TYPE TEXT
+      )
+    `;
+
+    db.query(sql, [], (e) => {
+      db.detach();
+      if (e) {
+        // Se der erro, provavelmente é porque já existe (o que é bom!)
+        return res.json({ 
+          status: 'Aviso', 
+          mensagem: 'Provavelmente a tabela já existe ou houve um erro.',
+          erro_banco: e.message 
+        });
+      }
+      res.json({ status: 'Sucesso', mensagem: 'Tabela SOLICITACOES criada com sucesso!' });
+    });
+  });
 });
 
 app.listen(port, () => {

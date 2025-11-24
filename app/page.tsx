@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wrench, ClipboardList, User, Lock, AlertCircle } from "lucide-react"
 import { operadores, encarregados } from "@/lib/data"
+import { ApiService } from "@/lib/api.service";
 
 export default function LoginPage() {
   const router = useRouter()
@@ -24,47 +25,60 @@ export default function LoginPage() {
   const [usuarioEncarregado, setUsuarioEncarregado] = useState("")
   const [senhaEncarregado, setSenhaEncarregado] = useState("")
 
-  const handleLoginOperador = (e: React.FormEvent) => {
+
+  // Handlers de Login OPERADOR e ENCARREGADO
+  const handleLoginOperador = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
-    // Simulação de delay de rede
-    setTimeout(() => {
-      const operador = operadores.find((op) => op.id === matriculaOperador)
-
-      if (operador) {
-        // Em uma aplicação real, usaríamos cookies ou sessão
+    try {
+      // Chama a API real
+      const resultado = await ApiService.login('operador', matriculaOperador)
+      
+      if (resultado.ok && resultado.user) {
+        const user = resultado.user;
+        // Salva no localStorage para a sessão (mapeando campos do banco)
         localStorage.setItem("userType", "operador")
-        localStorage.setItem("userId", operador.id)
-        localStorage.setItem("userName", operador.nome)
+        localStorage.setItem("userId", user.LOGIN_MATRICULA || user.ID) // Ou use o ID do banco
+        localStorage.setItem("userName", user.NOME)
+        
+        // Redireciona
         router.push("/operador")
       } else {
-        setError("Matrícula não encontrada. Tente: 1, 2, 3...")
-        setLoading(false)
+        setError("Matrícula não encontrada.")
       }
-    }, 1000)
+    } catch (err) {
+      setError("Erro de conexão ou matrícula inválida.")
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleLoginEncarregado = (e: React.FormEvent) => {
+  const handleLoginEncarregado = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
-    setTimeout(() => {
-      // Validação simples para protótipo
-      const encarregado = encarregados.find((enc) => enc.usuario === usuarioEncarregado)
+    try {
+      // Chama a API real com senha
+      const resultado = await ApiService.login('encarregado', usuarioEncarregado, senhaEncarregado)
 
-      if (encarregado && senhaEncarregado === "123456") {
-        localStorage.setItem("userType", "manutencao")
-        localStorage.setItem("userId", encarregado.id)
-        localStorage.setItem("userName", encarregado.nome)
+      if (resultado.ok && resultado.user) {
+        const user = resultado.user;
+        localStorage.setItem("userType", "manutencao") // Note que aqui usamos 'manutencao' no front antigo
+        localStorage.setItem("userId", user.ID)
+        localStorage.setItem("userName", user.NOME)
+        
         router.push("/manutencao")
       } else {
-        setError("Usuário ou senha incorretos. (Senha padrão: 123456)")
-        setLoading(false)
+        setError("Usuário ou senha incorretos.")
       }
-    }, 1000)
+    } catch (err) {
+      setError("Erro ao tentar login.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

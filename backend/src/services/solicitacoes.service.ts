@@ -11,23 +11,46 @@ const dbConfig: Firebird.Options = {
   user: process.env.FB_USER || 'SYSDBA',
   password: process.env.FB_PASSWORD || 'masterkey',
   lowercase_keys: false,
-  role: undefined,
+  role: undefined as unknown as string,
   pageSize: 4096
 };
 
 const pool = Firebird.pool(10, dbConfig);
+
+// Função auxiliar para converter BLOB (Buffer) em Texto
+const converterBlobParaTexto = (row: any) => {
+  if (!row) return row;
+  
+  // Clona o objeto para não alterar a referência original
+  const novaLinha = { ...row };
+
+  // Se DESCRICAO for um Buffer, converte para String
+  if (novaLinha.DESCRICAO && Buffer.isBuffer(novaLinha.DESCRICAO)) {
+    novaLinha.DESCRICAO = novaLinha.DESCRICAO.toString('utf-8');
+  }
+
+  // Se OBSERVACOES for um Buffer, converte para String
+  if (novaLinha.OBSERVACOES && Buffer.isBuffer(novaLinha.OBSERVACOES)) {
+    novaLinha.OBSERVACOES = novaLinha.OBSERVACOES.toString('utf-8');
+  }
+
+  return novaLinha;
+};
 
 export const SolicitacoesService = {
   getAll(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
-        // Ordena por Data de Criação (mais recentes primeiro)
         const sql = `SELECT * FROM SOLICITACOES ORDER BY DATA_CRIACAO DESC`;
         db.query(sql, [], (e, result) => {
           db.detach();
           if (e) return reject(e);
-          resolve(result);
+          
+          // AQUI ESTÁ A MÁGICA: Convertemos cada linha
+          const dadosTratados = result.map(converterBlobParaTexto);
+          
+          resolve(dadosTratados);
         });
       });
     });
@@ -41,7 +64,9 @@ export const SolicitacoesService = {
         db.query(sql, [id], (e, result) => {
           db.detach();
           if (e) return reject(e);
-          resolve(result[0] || null);
+          
+          const item = result[0] ? converterBlobParaTexto(result[0]) : null;
+          resolve(item);
         });
       });
     });
