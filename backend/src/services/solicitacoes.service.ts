@@ -1,3 +1,5 @@
+// backend/src/services/solicitacoes.service.ts
+
 import Firebird from "node-firebird";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
@@ -17,27 +19,50 @@ const dbConfig: Firebird.Options = {
 
 const pool = Firebird.pool(10, dbConfig);
 
-// --- NOVA FUNÇÃO DE CONVERSÃO ---
-// Essa função transforma os dados binários (BLOB) do Firebird em texto legível
-const converterBlobParaTexto = (row: any) => {
-  if (!row) return row;
+// --- HELPER PARA LER O BLOB (FUNÇÃO OU BUFFER) ---
+const lerBlob = (valor: any): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    // 1. Se for nulo ou undefined, retorna string vazia
+    if (!valor) return resolve("");
 
-  // Cria uma cópia para não travar o objeto original
-  const novaLinha = { ...row };
+    // 2. Se já for Buffer (configurações específicas), converte direto
+    if (Buffer.isBuffer(valor)) {
+      return resolve(valor.toString("utf-8"));
+    }
 
-  // Converte a DESCRICAO se for Buffer
-  if (novaLinha.DESCRICAO && Buffer.isBuffer(novaLinha.DESCRICAO)) {
-    novaLinha.DESCRICAO = novaLinha.DESCRICAO.toString("utf-8"); // <--- O SEGREDO ESTÁ AQUI
-  }
+    // 3. Se for String, retorna a própria string
+    if (typeof valor === "string") {
+      return resolve(valor);
+    }
 
-  // Converte a OBSERVACOES se for Buffer
-  if (novaLinha.OBSERVACOES && Buffer.isBuffer(novaLinha.OBSERVACOES)) {
-    novaLinha.OBSERVACOES = novaLinha.OBSERVACOES.toString("utf-8");
-  }
+    // 4. Se for FUNÇÃO (O caso que está a acontecer!), executa para ler o Stream
+    if (typeof valor === "function") {
+      valor((err: any, name: any, eventEmitter: any) => {
+        if (err) return resolve(""); // Em caso de erro, retorna vazio para não quebrar
 
-  return novaLinha;
+        let chunks: Buffer[] = [];
+        eventEmitter.on("data", (chunk: any) => {
+          chunks.push(chunk);
+        });
+
+        eventEmitter.on("end", () => {
+          const bufferCompleto = Buffer.concat(chunks);
+          resolve(bufferCompleto.toString("utf-8"));
+        });
+
+        eventEmitter.on("error", (err: any) => {
+           console.error("Erro ao ler BLOB:", err);
+           resolve("");
+        });
+      });
+      return;
+    }
+
+    // 5. Fallback
+    resolve(String(valor));
+  });
 };
-// -------------------------------
+// ------------------------------------------------
 
 export const SolicitacoesService = {
   getAll(): Promise<any[]> {
@@ -47,14 +72,46 @@ export const SolicitacoesService = {
 
         const sql = `SELECT * FROM SOLICITACOES ORDER BY DATA_CRIACAO DESC`;
 
-        db.query(sql, [], (e, result) => {
+        db.query(sql, [], async (e, result) => {
           db.detach();
           if (e) return reject(e);
 
-          // Aplica a conversão em cada linha retornada
-          const dadosTratados = result.map(converterBlobParaTexto);
+          try {
+            // Processamos todas as linhas de forma assíncrona
+            // para dar tempo de ler os BLOBs (funções)
+            const dadosTratados = await Promise.all(
+              result.map(async (row: any) => {
+                // Tenta ler DESCRICAO (Maiúsculo ou Minúsculo)
+                const descRaw = row.DESCRICAO !== undefined ? row.DESCRICAO : row.descricao;
+                const obsRaw = row.OBSERVACOES !== undefined ? row.OBSERVACOES : row.observacoes;
 
-          resolve(dadosTratados);
+                const descricaoTexto = await lerBlob(descRaw);
+                const observacoesTexto = await lerBlob(obsRaw);
+
+                return {
+                  ...row,
+                  // Forçamos o retorno em campos padronizados para o front
+                  DESCRICAO: descricaoTexto,
+                  OBSERVACOES: observacoesTexto,
+                  // Mantemos compatibilidade caso o front busque minúsculo
+                  descricao: descricaoTexto,
+                  observacoes: observacoesTexto
+                };
+              })
+            );
+
+            // Debug para confirmar se funcionou
+            if (dadosTratados.length > 0) {
+              console.log("DEBUG - 1ª Linha Processada:", {
+                ID: dadosTratados[0].ID,
+                DESCRICAO: dadosTratados[0].DESCRICAO?.substring(0, 20) + "..." // Mostra só o início
+              });
+            }
+
+            resolve(dadosTratados);
+          } catch (processErr) {
+            reject(processErr);
+          }
         });
       });
     });
@@ -67,23 +124,29 @@ export const SolicitacoesService = {
 
         const sql = `SELECT * FROM SOLICITACOES WHERE ID = ?`;
 
-        db.query(sql, [id], (e, result) => {
+        db.query(sql, [id], async (e, result) => {
           db.detach();
           if (e) return reject(e);
+          
+          if (!result[0]) return resolve(null);
 
-          const item = result[0] ? converterBlobParaTexto(result[0]) : null;
-          resolve(item);
+          const row = result[0];
+          const descRaw = row.DESCRICAO !== undefined ? row.DESCRICAO : row.descricao;
+          const obsRaw = row.OBSERVACOES !== undefined ? row.OBSERVACOES : row.observacoes;
+
+          const descricaoTexto = await lerBlob(descRaw);
+          const observacoesTexto = await lerBlob(obsRaw);
+
+          resolve({
+            ...row,
+            DESCRICAO: descricaoTexto,
+            OBSERVACOES: observacoesTexto,
+            descricao: descricaoTexto,
+            observacoes: observacoesTexto
+          });
         });
       });
     });
-  },
-
-  async findAll() {
-    // ADICIONEI "descricao" AQUI EM BAIXO
-    const query =
-      "SELECT id, numero_maquina, tipo_problema, status, data_hora, descricao FROM solicitacoes ORDER BY data_hora DESC";
-    const result = await this.executeQuery(query);
-    return result;
   },
 
   create(data: any): Promise<any> {
@@ -96,34 +159,17 @@ export const SolicitacoesService = {
 
         const sql = `
           INSERT INTO SOLICITACOES (
-            ID,
-            OPERADOR_ID,
-            OPERADOR_NOME,
-            SETOR,
-            MAQUINA,
-            DESCRICAO,
-            STATUS,
-            PRIORIDADE,
-            TIPO_SERVICO,
-            DATA_CRIACAO,
-            DATA_ATUALIZACAO,
-            OBSERVACOES
+            ID, OPERADOR_ID, OPERADOR_NOME, SETOR, MAQUINA,
+            DESCRICAO, STATUS, PRIORIDADE, TIPO_SERVICO,
+            DATA_CRIACAO, DATA_ATUALIZACAO, OBSERVACOES
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const params = [
-          novoId,
-          data.operadorId,
-          data.operadorNome,
-          data.setor,
-          data.maquina,
-          data.descricao,
-          data.status || "pendente",
-          data.prioridade || "C",
-          data.tipoServico || "Mecânica",
-          agora,
-          null,
-          data.observacoes || "",
+          novoId, data.operadorId, data.operadorNome, data.setor, data.maquina,
+          data.descricao, 
+          data.status || "pendente", data.prioridade || "C", data.tipoServico || "Mecânica",
+          agora, null, data.observacoes || "",
         ];
 
         db.query(sql, params, (e) => {
@@ -139,19 +185,9 @@ export const SolicitacoesService = {
     return new Promise((resolve, reject) => {
       pool.get((err, db) => {
         if (err) return reject(err);
-
         const agora = new Date();
-        const sql = `
-          UPDATE SOLICITACOES SET
-            STATUS = ?,
-            DATA_ATUALIZACAO = ?,
-            OBSERVACOES = ?
-          WHERE ID = ?
-        `;
-
-        const params = [data.status, agora, data.observacoes, id];
-
-        db.query(sql, params, (e) => {
+        const sql = `UPDATE SOLICITACOES SET STATUS = ?, DATA_ATUALIZACAO = ?, OBSERVACOES = ? WHERE ID = ?`;
+        db.query(sql, [data.status, agora, data.observacoes, id], (e) => {
           db.detach();
           if (e) return reject(e);
           resolve({ ok: true });

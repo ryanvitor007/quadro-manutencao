@@ -133,7 +133,7 @@ export default function OperadorPage() {
           operadorNome: s.OPERADOR_NOME,
           setor: s.SETOR,
           maquina: s.MAQUINA,
-          descricao: s.DESCRICAO ? s.DESCRICAO.toString() : "", // Converte BLOB para string
+          descricao: s.DESCRICAO ? String(s.DESCRICAO): s.descricao? String(s.descricao): "",
           status: s.STATUS || "pendente",
           prioridade: s.PRIORIDADE || "C",
           tipoServico: s.TIPO_SERVICO || "Mecânica",

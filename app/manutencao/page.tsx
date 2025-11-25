@@ -104,7 +104,7 @@ export default function ManutencaoPage() {
           operadorNome: s.OPERADOR_NOME,
           setor: s.SETOR,
           maquina: s.MAQUINA,
-          descricao: s.DESCRICAO ? s.DESCRICAO.toString() : "", // BLOBs precisam de atenção
+          descricao: s.DESCRICAO ? String(s.DESCRICAO) : (s.descricao ? String(s.descricao) : ""),
           status: s.STATUS || "pendente",
           prioridade: s.PRIORIDADE || "C",
           tipoServico: s.TIPO_SERVICO || "Mecânica",
