@@ -1,11 +1,1552 @@
-[00:00:03.486] Server  LOG      ✓ Ready in 2.5s
-[00:00:14.830] Server  LOG      ○ Compiling / ...
-[00:00:36.458] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:36.800] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:36.800] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:36.800] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763996434623}
-[00:00:42.908] Server  LOG      ○ Compiling /operador ...
-[00:00:58.449] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/operador color: rgb(120, 120, 120) color: inherit {"dp":"/operador","o":"http://localhost:3000/operador","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763996456184}
-[00:01:17.638] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763996475568}
-[00:01:29.087] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/manutencao color: rgb(120, 120, 120) color: inherit {"dp":"/manutencao","o":"http://localhost:3000/manutencao","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763996487000}
-[00:32:51.153] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763998369085}
+[00:00:01.621] Server  LOG      ✓ Ready in 1117ms
+[00:00:06.199] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:07.637] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="pt-BR">
+                          <body
+                            className="inter_5972bc34-module__OU16Qa__className font-sans antialiased"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+
+[00:00:07.637] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:07.637] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:07.637] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763999296921}
+[00:00:14.431] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:14.641] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:14.641] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:14.641] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1763999304846}
+[00:00:20.909] Server  LOG      ○ Compiling /operador ...
+[00:00:22.180] Server  ERROR    ⨯ ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+
+./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:00:22.400] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:22.400] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:23.815] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:23.816] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:23.950] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:23.950] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:25.141] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:25.141] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:25.188] Server  ERROR    ⨯ ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+
+./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:00:25.532] Browser ERROR   uncaughtError: Error: ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:00:25.766] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:25.766] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:25.766] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:00:25.766] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:11.592] Server  ERROR    ⨯ ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+
+./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:04:11.995] Browser ERROR   uncaughtError: Error: ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:04:12.194] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:12.194] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:12.194] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:12.194] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:14.256] Browser ERROR   uncaughtError: Error: ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:04:14.421] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:14.421] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:14.421] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:14.421] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:15.934] Browser ERROR   uncaughtError: Error: ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:04:16.122] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:16.122] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:16.122] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:16.122] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:21.413] Browser ERROR   uncaughtError: Error: ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+
+
+[00:04:21.606] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:21.606] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:21.606] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[00:04:21.606] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[20:31:30.671] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[20:31:30.707] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[20:31:30.708] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[20:31:30.708] Browser ERROR   ./app/operador/page.tsx:31:1
+Export operadores doesn't exist in target module
+  29 | import Link from "next/link";
+  30 | import { useRouter } from "next/navigation";
+> 31 | import {
+     | ^^^^^^^^
+> 32 |   operadores,
+     | ^^^^^^^^^^^^^
+> 33 |   type Solicitacao,
+     | ^^^^^^^^^^^^^
+> 34 |   solicitacoesIniciais,
+     | ^^^^^^^^^^^^^
+> 35 |   type PrioridadeSolicitacao,
+     | ^^^^^^^^^^^^^
+> 36 |   type TipoServico,
+     | ^^^^^^^^^^^^^
+> 37 | } from "@/lib/data";
+     | ^^^^^^^^^^^^^^^^^^^^^
+  38 | import {
+  39 |   Table,
+  40 |   TableBody,
+
+The export operadores was not found in module [project]/lib/data.ts [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/operador/page.tsx [Client Component Browser]
+    ./app/operador/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/operador/page.tsx [Client Component SSR]
+    ./app/operador/page.tsx [Server Component]
+[20:39:15.513] Server  LOG      ✓ Compiled in 1477ms
+[20:39:18.506] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[20:39:19.632] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[20:39:19.632] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[20:39:19.632] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764073649076}
+[20:39:49.369] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[20:39:52.634] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[20:39:52.779] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[20:39:52.780] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[20:39:52.780] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764073682975}
+[20:40:05.418] Server  LOG      ○ Compiling /operador ...
+[20:40:14.914] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/operador color: rgb(120, 120, 120) color: inherit {"dp":"/operador","o":"http://localhost:3000/operador","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764073704652}
+[20:40:59.172] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764073749239}
+[20:41:11.979] Server  LOG      ○ Compiling /manutencao ...
+[20:42:16.607] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[20:42:16.749] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[20:42:16.749] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[20:42:16.749] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764073826954}
+[20:42:22.090] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/manutencao color: rgb(120, 120, 120) color: inherit {"dp":"/manutencao","o":"http://localhost:3000/manutencao","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764073832281}

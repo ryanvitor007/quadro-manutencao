@@ -1,4 +1,4 @@
-// Mock data structure for local testing
+// lib/data.ts
 
 export type StatusSolicitacao = "pendente" | "em_andamento" | "concluida" | "cancelada"
 
@@ -11,7 +11,7 @@ export interface Operador {
   nome: string
   setor: string
   maquina: string
-  maquinaId?: string // Added optional machine ID for linking
+  maquinaId?: string
 }
 
 export interface Encarregado {
@@ -42,22 +42,21 @@ export interface Solicitacao {
   observacoes?: string
 }
 
-// Mock data - Operadores
+// --- DADOS MOCK (IMPORTANTE: Mantenha o 'export const') ---
+
 export const operadores: Operador[] = [
-  { id: "1", nome: "João Silva", setor: "Fundição", maquina: "Forno 01", maquinaId: "1" }, // Added machine IDs
+  { id: "1", nome: "João Silva", setor: "Fundição", maquina: "Forno 01", maquinaId: "1" },
   { id: "2", nome: "Maria Santos", setor: "Laminação", maquina: "Laminador 03", maquinaId: "6" },
   { id: "3", nome: "Pedro Costa", setor: "Fundição", maquina: "Forno 02", maquinaId: "2" },
   { id: "4", nome: "Ana Oliveira", setor: "Laminação", maquina: "Laminador 01", maquinaId: "4" },
   { id: "5", nome: "Carlos Souza", setor: "Acabamento", maquina: "Serra 02", maquinaId: "8" },
 ]
 
-// Mock data - Encarregados
 export const encarregados: Encarregado[] = [
   { id: "1", nome: "Roberto Almeida", usuario: "roberto.almeida" },
   { id: "2", nome: "Fernanda Lima", usuario: "fernanda.lima" },
 ]
 
-// Mock data - Máquinas
 export const maquinas: Maquina[] = [
   { id: "1", nome: "Forno 01", setor: "Fundição", codigo: "FND-F01" },
   { id: "2", nome: "Forno 02", setor: "Fundição", codigo: "FND-F02" },
@@ -68,14 +67,12 @@ export const maquinas: Maquina[] = [
   { id: "7", nome: "Serra 01", setor: "Prensas", codigo: "ACB-S01" },
   { id: "8", nome: "Serra 02", setor: "Prensas", codigo: "ACB-S02" },
   { id: "9", nome: "Prensa 01", setor: "Prensas", codigo: "ACB-P01" },
-  { id: "10", nome: "Prensa 02", setor: "Prensas", codigo: "ACB-P02" }, // Added more machines for testing
+  { id: "10", nome: "Prensa 02", setor: "Prensas", codigo: "ACB-P02" },
   { id: "11", nome: "Extrusora 01", setor: "Extrusão", codigo: "EXT-E01" },
 ]
 
-// Mock data - Setores
-export const setores = ["Fundição", "Laminação", "Prensas", "Slitters", "Extrusão"] // Added Extrusão sector
+export const setores = ["Fundição", "Laminação", "Prensas", "Slitters", "Extrusão"]
 
-// Mock data - Solicitações (para teste)
 export const solicitacoesIniciais: Solicitacao[] = [
   {
     id: "1",
