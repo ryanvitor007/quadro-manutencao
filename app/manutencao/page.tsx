@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   Clock,
   CheckCircle2,
+  QrCode,
   AlertCircle,
   XCircle,
   Eye,
@@ -104,13 +105,19 @@ export default function ManutencaoPage() {
           operadorNome: s.OPERADOR_NOME,
           setor: s.SETOR,
           maquina: s.MAQUINA,
-          descricao: s.DESCRICAO ? String(s.DESCRICAO) : (s.descricao ? String(s.descricao) : ""),
+          descricao: s.DESCRICAO
+            ? String(s.DESCRICAO)
+            : s.descricao
+            ? String(s.descricao)
+            : "",
           status: s.STATUS || "pendente",
           prioridade: s.PRIORIDADE || "C",
           tipoServico: s.TIPO_SERVICO || "Mecânica",
           dataCriacao: s.DATA_CRIACAO,
           dataAtualizacao: s.DATA_ATUALIZACAO,
           observacoes: s.OBSERVACOES ? s.OBSERVACOES.toString() : "",
+          criadoPorQr: s.criadoPorQr,
+          responsavelTecnico: s.responsavelTecnico,
         }));
 
         setSolicitacoes(dadosFormatados);
@@ -189,6 +196,7 @@ export default function ManutencaoPage() {
     return prioridadeConfig[prioridade] || prioridadeConfig["C"];
   };
 
+  // Detalhe da solicitação selecionada
   if (solicitacaoSelecionada) {
     const StatusIcon = statusConfig[solicitacaoSelecionada.status].icon;
     // Use safe config getter
@@ -547,12 +555,41 @@ export default function ManutencaoPage() {
                               {formatarData(solicitacao.dataCriacao)}
                             </span>
                           </div>
-                          <h3 className="font-semibold text-foreground mb-1">
+                          {/* Título da Máquina + Ícone QR */}
+                          <h3 className="font-semibold text-foreground mb-1 flex items-center gap-2">
                             {solicitacao.maquina} - {solicitacao.setor}
+                            {/* Se foi criado por QR, mostra o ícone */}
+                            {solicitacao.criadoPorQr && (
+                              <div
+                                title="Solicitado via Leitura de QR Code"
+                                className="bg-blue-100 text-blue-600 p-1 rounded-md"
+                              >
+                                <QrCode className="size-4" />
+                              </div>
+                            )}
                           </h3>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            Operador: {solicitacao.operadorNome}
-                          </p>
+
+                          {/* Lógica dos Nomes: Operador vs Responsável Técnico */}
+                          {solicitacao.criadoPorQr ? (
+                            <div className="mb-2 text-sm bg-blue-50/50 p-2 rounded border border-blue-100/50">
+                              <p className="text-muted-foreground">
+                                Solicitante:{" "}
+                                <span className="font-medium text-foreground">
+                                  {solicitacao.operadorNome}
+                                </span>
+                              </p>
+                              <p className="text-muted-foreground mt-0.5">
+                                Responsável Técnico:{" "}
+                                <span className="font-medium text-blue-700">
+                                  {solicitacao.responsavelTecnico || "N/D"}
+                                </span>
+                              </p>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground mb-2">
+                              Operador: {solicitacao.operadorNome}
+                            </p>
+                          )}
                           <p className="text-sm text-foreground line-clamp-2">
                             {solicitacao.descricao}
                           </p>

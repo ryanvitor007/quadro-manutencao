@@ -51,8 +51,8 @@ const lerBlob = (valor: any): Promise<string> => {
         });
 
         eventEmitter.on("error", (err: any) => {
-           console.error("Erro ao ler BLOB:", err);
-           resolve("");
+          console.error("Erro ao ler BLOB:", err);
+          resolve("");
         });
       });
       return;
@@ -82,8 +82,12 @@ export const SolicitacoesService = {
             const dadosTratados = await Promise.all(
               result.map(async (row: any) => {
                 // Tenta ler DESCRICAO (Maiúsculo ou Minúsculo)
-                const descRaw = row.DESCRICAO !== undefined ? row.DESCRICAO : row.descricao;
-                const obsRaw = row.OBSERVACOES !== undefined ? row.OBSERVACOES : row.observacoes;
+                const descRaw =
+                  row.DESCRICAO !== undefined ? row.DESCRICAO : row.descricao;
+                const obsRaw =
+                  row.OBSERVACOES !== undefined
+                    ? row.OBSERVACOES
+                    : row.observacoes;
 
                 const descricaoTexto = await lerBlob(descRaw);
                 const observacoesTexto = await lerBlob(obsRaw);
@@ -93,9 +97,10 @@ export const SolicitacoesService = {
                   // Forçamos o retorno em campos padronizados para o front
                   DESCRICAO: descricaoTexto,
                   OBSERVACOES: observacoesTexto,
-                  // Mantemos compatibilidade caso o front busque minúsculo
                   descricao: descricaoTexto,
-                  observacoes: observacoesTexto
+                  observacoes: observacoesTexto,
+                  criadoPorQr: row.CRIADO_POR_QR === 1,
+                  responsavelTecnico: row.RESPONSAVEL_TECNICO,
                 };
               })
             );
@@ -104,7 +109,7 @@ export const SolicitacoesService = {
             if (dadosTratados.length > 0) {
               console.log("DEBUG - 1ª Linha Processada:", {
                 ID: dadosTratados[0].ID,
-                DESCRICAO: dadosTratados[0].DESCRICAO?.substring(0, 20) + "..." // Mostra só o início
+                DESCRICAO: dadosTratados[0].DESCRICAO?.substring(0, 20) + "...", // Mostra só o início
               });
             }
 
@@ -127,12 +132,14 @@ export const SolicitacoesService = {
         db.query(sql, [id], async (e, result) => {
           db.detach();
           if (e) return reject(e);
-          
+
           if (!result[0]) return resolve(null);
 
           const row = result[0];
-          const descRaw = row.DESCRICAO !== undefined ? row.DESCRICAO : row.descricao;
-          const obsRaw = row.OBSERVACOES !== undefined ? row.OBSERVACOES : row.observacoes;
+          const descRaw =
+            row.DESCRICAO !== undefined ? row.DESCRICAO : row.descricao;
+          const obsRaw =
+            row.OBSERVACOES !== undefined ? row.OBSERVACOES : row.observacoes;
 
           const descricaoTexto = await lerBlob(descRaw);
           const observacoesTexto = await lerBlob(obsRaw);
@@ -142,7 +149,9 @@ export const SolicitacoesService = {
             DESCRICAO: descricaoTexto,
             OBSERVACOES: observacoesTexto,
             descricao: descricaoTexto,
-            observacoes: observacoesTexto
+            observacoes: observacoesTexto,
+            criadoPorQr: row.CRIADO_POR_QR === 1,
+            responsavelTecnico: row.RESPONSAVEL_TECNICO
           });
         });
       });
@@ -161,15 +170,26 @@ export const SolicitacoesService = {
           INSERT INTO SOLICITACOES (
             ID, OPERADOR_ID, OPERADOR_NOME, SETOR, MAQUINA,
             DESCRICAO, STATUS, PRIORIDADE, TIPO_SERVICO,
-            DATA_CRIACAO, DATA_ATUALIZACAO, OBSERVACOES
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            DATA_CRIACAO, DATA_ATUALIZACAO, OBSERVACOES,
+            CRIADO_POR_QR, RESPONSAVEL_TECNICO
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const params = [
-          novoId, data.operadorId, data.operadorNome, data.setor, data.maquina,
-          data.descricao, 
-          data.status || "pendente", data.prioridade || "C", data.tipoServico || "Mecânica",
-          agora, null, data.observacoes || "",
+          novoId,
+          data.operadorId,
+          data.operadorNome,
+          data.setor,
+          data.maquina,
+          data.descricao,
+          data.status || "pendente",
+          data.prioridade || "C",
+          data.tipoServico || "Mecânica",
+          agora,
+          null,
+          data.observacoes || "",
+          data.criadoPorQr ? 1 : 0, 
+          data.responsavelTecnico || null
         ];
 
         db.query(sql, params, (e) => {

@@ -1,92 +1,106 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Wrench, ClipboardList, User, Lock, AlertCircle } from "lucide-react"
-import { operadores, encarregados } from "@/lib/data"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Wrench, ClipboardList, User, Lock, AlertCircle } from "lucide-react";
+import { operadores, encarregados } from "@/lib/data";
 import { ApiService } from "@/lib/api.service";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Estados para login de Operador
-  const [matriculaOperador, setMatriculaOperador] = useState("")
+  const [matriculaOperador, setMatriculaOperador] = useState("");
 
   // Estados para login de Encarregado
-  const [usuarioEncarregado, setUsuarioEncarregado] = useState("")
-  const [senhaEncarregado, setSenhaEncarregado] = useState("")
-
+  const [usuarioEncarregado, setUsuarioEncarregado] = useState("");
+  const [senhaEncarregado, setSenhaEncarregado] = useState("");
 
   // Handlers de Login OPERADOR e ENCARREGADO
   const handleLoginOperador = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
       // Chama a API real
-      const resultado = await ApiService.login('operador', matriculaOperador)
-      
+      const resultado = await ApiService.login("operador", matriculaOperador);
+
       if (resultado.ok && resultado.user) {
         const user = resultado.user;
         // Salva no localStorage para a sessão (mapeando campos do banco)
-        localStorage.setItem("userType", "operador")
-        localStorage.setItem("userId", user.LOGIN_MATRICULA || user.ID) // Ou use o ID do banco
-        localStorage.setItem("userName", user.NOME)
-        
+        localStorage.setItem("userType", "operador");
+        localStorage.setItem("userId", user.LOGIN_MATRICULA || user.ID); // Ou use o ID do banco
+        localStorage.setItem("userName", user.NOME);
+
         // Redireciona
-        router.push("/operador")
+        router.push("/operador");
       } else {
-        setError("Matrícula não encontrada.")
+        setError("Matrícula não encontrada.");
       }
     } catch (err) {
-      setError("Erro de conexão ou matrícula inválida.")
+      setError("Erro de conexão ou matrícula inválida.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleLoginEncarregado = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
       // Chama a API real com senha
-      const resultado = await ApiService.login('encarregado', usuarioEncarregado, senhaEncarregado)
+      const resultado = await ApiService.login(
+        "encarregado",
+        usuarioEncarregado,
+        senhaEncarregado
+      );
 
       if (resultado.ok && resultado.user) {
         const user = resultado.user;
-        localStorage.setItem("userType", "manutencao") // Note que aqui usamos 'manutencao' no front antigo
-        localStorage.setItem("userId", user.ID)
-        localStorage.setItem("userName", user.NOME)
-        
-        router.push("/manutencao")
+        localStorage.setItem("userType", "manutencao"); // Note que aqui usamos 'manutencao' no front antigo
+        localStorage.setItem("userId", user.ID);
+        localStorage.setItem("userName", user.NOME);
+
+        router.push("/manutencao");
       } else {
-        setError("Usuário ou senha incorretos.")
+        setError("Usuário ou senha incorretos.");
       }
     } catch (err) {
-      setError("Erro ao tentar login.")
+      setError("Erro ao tentar login.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/20 to-background p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Quadro de Manutenção</h1>
-          <p className="text-muted-foreground">Fundaluminio - Acesso ao Sistema</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            Quadro de Manutenção
+          </h1>
+          <p className="text-muted-foreground">
+            Fundaluminio - Acesso ao Sistema
+          </p>
         </div>
 
         <Tabs defaultValue="operador" className="w-full">
@@ -140,7 +154,11 @@ export default function LoginPage() {
                   )}
                 </CardContent>
                 <CardFooter className="pt-2">
-                  <Button type="submit" className="w-full h-12 text-lg font-semibold" disabled={loading}>
+                  <Button
+                    type="submit"
+                    className="w-full h-12 text-lg font-semibold"
+                    disabled={loading}
+                  >
                     {loading ? "Entrando..." : "Acessar Sistema"}
                   </Button>
                 </CardFooter>
@@ -155,7 +173,9 @@ export default function LoginPage() {
                   <ClipboardList className="size-6 text-accent" />
                   Acesso Encarregado
                 </CardTitle>
-                <CardDescription>Área restrita para gestão de manutenção.</CardDescription>
+                <CardDescription>
+                  Área restrita para gestão de manutenção.
+                </CardDescription>
               </CardHeader>
               <form onSubmit={handleLoginEncarregado}>
                 <CardContent className="space-y-4">
@@ -210,9 +230,11 @@ export default function LoginPage() {
         </Tabs>
 
         <div className="mt-8 text-center">
-          <p className="text-xs text-muted-foreground">Fundaluminio © 2025 - Sistema de Controle Industrial</p>
+          <p className="text-xs text-muted-foreground">
+            Fundaluminio © 2025 - Sistema de Controle Industrial
+          </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -5,6 +5,7 @@ import Firebird from 'node-firebird';
 import solicitacoesRoutes from "./routes/solicitacoes.routes";
 import { AuthController } from "./controllers/auth.controller"; // Importe o controller
 import authRoutes from "./routes/auth.routes";
+import maquinasRoutes from "./routes/maquinas.routes"; // <--- Importa as rotas de máquinas
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/solicitacoes", solicitacoesRoutes);
 app.use("/api/auth", authRoutes); // Use as rotas de autenticação
+app.use("/api/maquinas", maquinasRoutes); // <--- Usa as rotas de máquinas
 
 // Config Firebird
 const dbConfig: Firebird.Options = {
@@ -23,7 +25,7 @@ const dbConfig: Firebird.Options = {
   user: process.env.FB_USER || 'SYSDBA',
   password: process.env.FB_PASSWORD || 'masterkey',
   lowercase_keys: false,
-  role: null,
+  role: undefined,
   pageSize: 4096
 };
 
@@ -43,7 +45,7 @@ app.get('/api/test-db', (_req, res) => {
       return res.status(500).json({ ok: false, error: 'Erro de conexão com o banco' });
     }
 
-    db.query('SELECT 1 AS TESTE FROM RDB$DATABASE', (queryErr, result) => {
+    db.query('SELECT 1 AS TESTE FROM RDB$DATABASE', [], (queryErr, result) => {
       db.detach();
 
       if (queryErr) {

@@ -12,20 +12,21 @@ export interface SolicitacaoDTO {
   prioridade: string;
   tipoServico: string;
   status?: string;
+  criadoPorQr?: boolean;
+  responsavelTecnico?: string;
 }
 
 // Serviço para interagir com a API de solicitações
 export const ApiService = {
-
   // Método de Login
-  async login(tipo: 'operador' | 'encarregado', login: string, senha?: string) {
+  async login(tipo: "operador" | "encarregado", login: string, senha?: string) {
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tipo, login, senha }),
       });
-      
+
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Erro no login");
       return data;
@@ -35,10 +36,39 @@ export const ApiService = {
     }
   },
 
+  // Buscar máquina pelo código do QR
+  async getMaquinaByCodigo(codigo: string) {
+    try {
+      // Chama a rota que criámos: /api/maquinas/buscar?codigo=...
+      const response = await fetch(
+        `${API_URL}/maquinas/buscar?codigo=${codigo}`
+      );
+
+      if (!response.ok) {
+        if (response.status === 404) throw new Error("Máquina não encontrada");
+        throw new Error("Erro ao buscar máquina");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Erro no scanner:", error);
+      throw error;
+    }
+  },
+
+  // Opcional: Para listar no painel de gestão
+  async getTodasMaquinas() {
+    const response = await fetch(`${API_URL}/maquinas`);
+    return await response.json();
+  },
+  //  <-- Fim do código de máquinas -->
+
   // Buscar todas as solicitações
   async getAll() {
     try {
-      const response = await fetch(`${API_URL}/solicitacoes`, { cache: 'no-store' });
+      const response = await fetch(`${API_URL}/solicitacoes`, {
+        cache: "no-store",
+      });
       if (!response.ok) throw new Error("Erro ao buscar dados");
       return await response.json();
     } catch (error) {
@@ -77,5 +107,5 @@ export const ApiService = {
       console.error("Erro na API (update):", error);
       throw error;
     }
-  }
+  },
 };

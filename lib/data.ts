@@ -28,18 +28,20 @@ export interface Maquina {
 }
 
 export interface Solicitacao {
-  id: string
-  operadorId: string
-  operadorNome: string
-  setor: string
-  maquina: string
-  descricao: string
-  status: StatusSolicitacao
-  prioridade: PrioridadeSolicitacao
-  tipoServico: TipoServico
-  dataCriacao: string
-  dataAtualizacao?: string
-  observacoes?: string
+  id: string // ID único da solicitação
+  operadorId: string // ID do operador que criou a solicitação
+  operadorNome: string // Nome do operador que criou a solicitação
+  setor: string // Setor da máquina
+  maquina: string // Nome da máquina
+  descricao: string // Descrição detalhada do problema
+  status: StatusSolicitacao // Estado atual da solicitação
+  prioridade: PrioridadeSolicitacao // Nível de prioridade A, B ou C
+  tipoServico: TipoServico // Tipo de serviço solicitado 
+  dataCriacao: string // Data de criação da solicitação
+  dataAtualizacao?: string // Data da última atualização   
+  observacoes?: string // Observações da equipe de manutenção
+  criadoPorQr?: boolean;       // Indica se foi criada via QR code
+  responsavelTecnico?: string; // Nome do responsável técnico associado
 }
 
 // --- DADOS MOCK (IMPORTANTE: Mantenha o 'export const') ---

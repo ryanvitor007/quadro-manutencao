@@ -25,6 +25,7 @@ import {
   RefreshCw,
   AlertTriangle,
   Info,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -69,7 +70,12 @@ export default function OperadorPage() {
   >([]);
   const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
   const [isMinhaMaquina, setIsMinhaMaquina] = useState(true);
-  const [maquinaAtual, setMaquinaAtual] = useState({ nome: "", setor: "" });
+  const [maquinaAtual, setMaquinaAtual] = useState({
+    nome: "",
+    setor: "",
+    responsavel: "",
+    codigo: "",
+  });
   const [scanning, setScanning] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,13 +84,44 @@ export default function OperadorPage() {
     setIsMinhaMaquina(checked);
   };
 
-  const handleScanQRCode = () => {
+  // Função para simular a leitura do QR Code
+  const handleScanQRCode = async () => {
     setScanning(true);
-    // Simulate QR code scanning
-    setTimeout(() => {
+
+    // NOTA: Num cenário real com câmara, usarias uma lib como 'react-qr-reader'.
+    // Aqui vamos simular que a câmara leu o código "FND-F01" (que inserimos no SQL)
+    const codigoLidoPelaCamera = "FND-F01";
+
+    try {
+      // Chama a API real
+      const dadosMaquina = await ApiService.getMaquinaByCodigo(
+        codigoLidoPelaCamera
+      );
+
+      // O backend devolve chaves em Maiúsculo ou Minúsculo (depende do service)
+      // Vamos garantir a leitura:
+      const nome = dadosMaquina.NOME || dadosMaquina.nome;
+      const setor = dadosMaquina.SETOR || dadosMaquina.setor;
+      const responsavel =
+        dadosMaquina.RESPONSAVEL_TECNICO ||
+        dadosMaquina.responsavel_tecnico ||
+        "Não definido";
+
+      setMaquinaAtual({
+        nome,
+        setor,
+        responsavel,
+        codigo: codigoLidoPelaCamera,
+      });
+
+      // Define que NÃO é máquina do operador (para mostrar os dados escaneados)
+      setIsMinhaMaquina(false);
+    } catch (error) {
+      alert("Erro: Código QR inválido ou máquina não cadastrada.");
+      setMaquinaAtual({ nome: "", setor: "", responsavel: "", codigo: "" });
+    } finally {
       setScanning(false);
-      setMaquinaAtual({ nome: "Maquina1", setor: "Setor1" }); // Example QR code result
-    }, 2000);
+    }
   };
 
   useEffect(() => {
@@ -107,6 +144,8 @@ export default function OperadorPage() {
       setMaquinaAtual({
         nome: operadorAtual.maquina,
         setor: operadorAtual.setor,
+        responsavel: "",
+        codigo: "",
       });
     }
   }, [operadorAtual, isMinhaMaquina]);
@@ -133,7 +172,11 @@ export default function OperadorPage() {
           operadorNome: s.OPERADOR_NOME,
           setor: s.SETOR,
           maquina: s.MAQUINA,
-          descricao: s.DESCRICAO ? String(s.DESCRICAO): s.descricao? String(s.descricao): "",
+          descricao: s.DESCRICAO
+            ? String(s.DESCRICAO)
+            : s.descricao
+            ? String(s.descricao)
+            : "",
           status: s.STATUS || "pendente",
           prioridade: s.PRIORIDADE || "C",
           tipoServico: s.TIPO_SERVICO || "Mecânica",
@@ -208,7 +251,7 @@ export default function OperadorPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!operadorSelecionado || !descricao.trim() || !maquinaAtual.nome) {
@@ -219,6 +262,9 @@ export default function OperadorPage() {
     setIsSubmitting(true);
 
     try {
+      // CORREÇÃO 1: Declarar a variável isQrCode aqui
+      const isQrCode = !isMinhaMaquina;
+
       // Preparar objeto para envio
       const novaSolicitacao = {
         operadorId: operadorSelecionado,
@@ -229,6 +275,12 @@ export default function OperadorPage() {
         prioridade: prioridade,
         tipoServico: tipoServico,
         status: "pendente",
+        
+        // CORREÇÃO 2: Passar a variável que acabámos de criar
+        criadoPorQr: isQrCode,
+        
+        // CORREÇÃO 3: Usar 'undefined' em vez de 'null'
+        responsavelTecnico: isQrCode ? maquinaAtual.responsavel : undefined 
       };
 
       // Chamada real para o Back-end
@@ -237,23 +289,26 @@ export default function OperadorPage() {
       // Sucesso
       setSolicitacaoEnviada(true);
 
-      // Limpar formulário após delay (mantendo sua UX original)
+      // Limpar formulário após delay
       setTimeout(() => {
         setSolicitacaoEnviada(false);
         setDescricao("");
         setPrioridade("B");
         setTipoServico("Mecânica");
+        
+        // Reset completo
         setIsMinhaMaquina(true);
         if (operadorAtual) {
           setMaquinaAtual({
             nome: operadorAtual.maquina,
             setor: operadorAtual.setor,
+            responsavel: "", 
+            codigo: ""       
           });
         }
-        // Recarregar lista para mostrar a nova solicitação no histórico
-        // Você pode criar uma função carregarDados() fora do useEffect para chamar aqui também
       }, 2000);
     } catch (error) {
+      console.error(error); // Adicionei um log para ajudar
       alert("Erro ao enviar solicitação. Verifique a conexão com o servidor.");
     } finally {
       setIsSubmitting(false);
@@ -440,7 +495,12 @@ export default function OperadorPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() =>
-                              setMaquinaAtual({ nome: "", setor: "" })
+                              setMaquinaAtual({
+                                nome: "",
+                                setor: "",
+                                responsavel: "",
+                                codigo: "",
+                              })
                             }
                             className="text-xs h-8"
                           >
@@ -463,6 +523,19 @@ export default function OperadorPage() {
                             <p className="text-lg font-semibold mt-1">
                               {maquinaAtual.nome}
                             </p>
+                          </div>
+
+                          <div className="md:col-span-2 bg-blue-50 p-3 rounded-md border border-blue-100">
+                            <Label className="text-sm text-blue-600 font-bold">
+                              Responsável Técnico
+                            </Label>
+                            <div className="flex items-center gap-2 mt-1">
+                              <User className="size-4 text-blue-500" />{" "}
+                              {/* Importar User do lucide-react */}
+                              <p className="text-lg font-semibold text-blue-900">
+                                {maquinaAtual.responsavel}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -634,6 +707,8 @@ export default function OperadorPage() {
                       setMaquinaAtual({
                         nome: operadorAtual.maquina,
                         setor: operadorAtual.setor,
+                        responsavel: "",
+                        codigo: "",
                       });
                     }
                   }}
